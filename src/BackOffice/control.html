@@ -1,0 +1,2484 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SaludPlus - Recepción</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css" rel="stylesheet">
+
+      <style>
+        :root {
+            --color-primary: #3498db;
+            --color-secondary: #2ecc71;
+            --color-accent: #e74c3c;
+            --color-light: #ecf0f1;
+            --color-dark: #2c3e50;
+            --color-dark-blue: #1a237e;
+            --color-light-blue: #e3f2fd;
+            --sidebar-width: 280px;
+            --header-height: 60px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f6fa;
+        }
+
+        /* Estructura principal */
+        .app-container {
+            display: none;
+        }
+
+        .header {
+            height: var(--header-height);
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.5rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--color-dark);
+            color: white;
+            position: fixed;
+            top: var(--header-height);
+            left: 0;
+            bottom: 0;
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .main-content {
+            margin-left: var(--sidebar-width);
+            margin-top: var(--header-height);
+            padding: 1.5rem;
+            min-height: calc(100vh - var(--header-height));
+            transition: margin-left 0.3s ease;
+        }
+
+        /* Menú mejorado con submenús */
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .menu-title {
+            padding: 1rem 1.5rem;
+            color: #b3b3b3;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+        }
+
+        .menu-item {
+            position: relative;
+        }
+
+        .menu-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .menu-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-icon {
+            margin-right: 0.75rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .has-submenu::after {
+            content: '\f078';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 1.5rem;
+            transition: transform 0.3s;
+            font-size: 0.8rem;
+        }
+
+        .has-submenu.active::after {
+            transform: rotate(180deg);
+        }
+
+        .submenu {
+            list-style: none;
+            background-color: rgba(0, 0, 0, 0.2);
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .submenu.show {
+            max-height: 500px;
+        }
+
+        .submenu .menu-link {
+            padding-left: 2.5rem;
+        }
+
+        /* Calendario elegante */
+        .calendar-container {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+
+        .calendar-toolbar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .view-options {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .view-option {
+            padding: 0.5rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            background-color: white;
+        }
+
+        .view-option:hover {
+            background-color: #f5f5f5;
+        }
+
+        .view-option.active {
+            background-color: var(--color-primary);
+            color: white;
+            border-color: var(--color-primary);
+        }
+
+        /* Estilos mejorados para el calendario */
+        .fc {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .fc .fc-toolbar-title {
+            font-size: 1.35rem;
+            color: var(--color-dark);
+            font-weight: 600;
+        }
+
+        .fc .fc-button {
+            background-color: var(--color-primary);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            text-transform: capitalize;
+        }
+
+        .fc .fc-button:hover {
+            background-color: #2980b9;
+        }
+
+        .fc .fc-button-primary:not(:disabled).fc-button-active {
+            background-color: var(--color-dark-blue);
+        }
+
+        .fc .fc-col-header-cell {
+            background-color: var(--color-light-blue);
+            padding: 0.5rem 0;
+        }
+
+        .fc .fc-col-header-cell-cushion {
+            color: var(--color-dark);
+            font-weight: 500;
+        }
+
+        .fc .fc-daygrid-day-number {
+            color: var(--color-dark);
+            font-weight: 500;
+        }
+
+        .fc .fc-day-today {
+            background-color: rgba(41, 182, 246, 0.1) !important;
+        }
+
+        .fc .fc-daygrid-day.fc-day-today .fc-daygrid-day-number {
+            color: var(--color-primary);
+            font-weight: bold;
+        }
+
+        /* Eventos del calendario mejorados */
+        .fc-event {
+            cursor: pointer;
+            margin-bottom: 3px;
+            border: none;
+            background-color: white;
+            color: var(--color-dark);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
+        }
+
+        .fc-event:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            transform: translateY(-1px);
+        }
+
+        .fc-event-main {
+            padding: 5px;
+            font-size: 0.85rem;
+        }
+
+        .fc-event-time {
+            font-weight: bold;
+            font-size: 0.75rem;
+            margin-bottom: 2px;
+            color: var(--color-primary);
+        }
+
+        .fc-event-title {
+            font-weight: 600;
+            white-space: normal;
+            line-height: 1.3;
+            margin-bottom: 2px;
+        }
+
+        .fc-event-doctor {
+            font-size: 0.7rem;
+            color: #666;
+            font-style: italic;
+        }
+
+        .fc-event-status {
+            font-size: 0.65rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
+
+        /* Modal mejorado */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(3px);
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transform: translateY(20px);
+            opacity: 0;
+            animation: modalOpen 0.3s forwards;
+        }
+
+        @keyframes modalOpen {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-content h3 {
+            margin-bottom: 1.5rem;
+            color: var(--color-dark);
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.75rem;
+            font-size: 1.5rem;
+        }
+
+        .detail-row {
+            display: flex;
+            margin-bottom: 1rem;
+            align-items: flex-start;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            width: 130px;
+            color: #555;
+            flex-shrink: 0;
+        }
+
+        .detail-value {
+            flex: 1;
+            word-break: break-word;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+            margin-top: 2rem;
+        }
+
+        .modal-actions button {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-confirm {
+            background-color: var(--color-secondary);
+            color: white;
+        }
+
+        .btn-confirm:hover {
+            background-color: #27ae60;
+            transform: translateY(-2px);
+        }
+
+        .btn-cancel {
+            background-color: var(--color-accent);
+            color: white;
+        }
+
+        .btn-cancel:hover {
+            background-color: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        .btn-close {
+            background-color: #f0f0f0;
+            color: #555;
+        }
+
+        .btn-close:hover {
+            background-color: #e0e0e0;
+            transform: translateY(-2px);
+        }
+
+        /* Lista de citas mejorada */
+        .appointments-list {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 2rem;
+        }
+
+        .appointments-list h2 {
+            margin-bottom: 1.5rem;
+            color: var(--color-dark);
+            font-size: 1.5rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.75rem;
+        }
+
+        .appointment-card {
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            background-color: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .appointment-card:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .appointment-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+            align-items: center;
+        }
+
+        .appointment-time {
+            font-weight: bold;
+            color: var(--color-primary);
+            font-size: 0.9rem;
+        }
+
+        .appointment-status {
+            padding: 0.3rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .appointment-patient {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            font-size: 1.1rem;
+            color: var(--color-dark);
+        }
+
+        .appointment-doctor {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .appointment-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .appointment-actions button {
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .appointment-actions button i {
+            font-size: 0.8rem;
+        }
+
+        /* Formulario de registro mejorado */
+        .form-container {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 2rem;
+        }
+
+        .form-container h2 {
+            margin-bottom: 1.5rem;
+            color: var(--color-dark);
+            font-size: 1.5rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.75rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #555;
+        }
+
+        .form-group input, 
+        .form-group select {
+            width: 100%;
+            padding: 0.85rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus, 
+        .form-group select:focus {
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            outline: none;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+            margin-top: 2rem;
+        }
+
+        .form-actions button {
+            padding: 0.85rem 1.75rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: #f0f0f0;
+            color: #555;
+        }
+
+        .btn-secondary:hover {
+            background-color: #e0e0e0;
+            transform: translateY(-2px);
+        }
+
+        /* Responsive mejorado */
+        @media (max-width: 992px) {
+            .fc .fc-toolbar {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .fc .fc-toolbar-title {
+                margin: 0.5rem 0;
+                order: 2;
+            }
+            
+            .fc-toolbar-chunk {
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                z-index: 1000;
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .calendar-toolbar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .view-options {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .view-option {
+                flex: 1;
+                text-align: center;
+            }
+            
+            .fc .fc-col-header-cell-cushion,
+            .fc .fc-daygrid-day-number {
+                font-size: 0.8rem;
+            }
+            
+            .fc-event-main {
+                padding: 3px;
+                font-size: 0.7rem;
+            }
+            
+            .modal-content {
+                padding: 1.5rem;
+            }
+            
+            .detail-row {
+                flex-direction: column;
+                gap: 0.3rem;
+            }
+            
+            .detail-label {
+                width: 100%;
+            }
+            
+            .modal-actions {
+                flex-direction: column;
+            }
+            
+            .modal-actions button {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .fc .fc-button {
+                padding: 0.4rem 0.7rem;
+                font-size: 0.8rem;
+            }
+            
+            .fc .fc-toolbar-title {
+                font-size: 1.1rem;
+            }
+            
+            .appointment-actions {
+                flex-direction: column;
+            }
+            
+            .appointment-actions button {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+        .medical-history-container {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .medical-history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .medical-history-title {
+            font-size: 1.5rem;
+            color: var(--color-dark);
+            border-bottom: 2px solid var(--color-primary);
+            padding-bottom: 0.5rem;
+        }
+
+        .filters-container {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .filters-title {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: var(--color-dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filters-title i {
+            color: var(--color-primary);
+        }
+
+        .filter-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #555;
+            font-size: 0.9rem;
+        }
+
+        .filter-group input,
+        .filter-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .filter-group input:focus,
+        .filter-group select:focus {
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            outline: none;
+        }
+
+        .filter-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .filter-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-apply {
+            background-color: var(--color-primary);
+            color: white;
+        }
+
+        .btn-apply:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .btn-reset {
+            background-color: #f0f0f0;
+            color: #555;
+        }
+
+        .btn-reset:hover {
+            background-color: #e0e0e0;
+            transform: translateY(-2px);
+        }
+
+        .medical-records {
+            margin-top: 1.5rem;
+        }
+
+        .record-card {
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+            background-color: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .record-card:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .record-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .record-patient {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--color-dark);
+        }
+
+        .record-date {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .record-doctor {
+            color: var(--color-primary);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .record-diagnosis {
+            font-weight: 600;
+            margin: 0.5rem 0;
+            color: var(--color-dark);
+        }
+
+        .record-details {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+
+        .detail-item {
+            display: flex;
+            margin-bottom: 0.5rem;
+        }
+
+        .detail-label {
+            font-weight: 500;
+            width: 120px;
+            color: #555;
+            flex-shrink: 0;
+        }
+
+        .detail-value {
+            flex: 1;
+        }
+
+        .record-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .record-btn {
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .btn-view {
+            background-color: var(--color-light-blue);
+            color: var(--color-primary);
+        }
+
+        .btn-view:hover {
+            background-color: #d0e3f7;
+        }
+
+        .btn-print {
+            background-color: #f0f0f0;
+            color: #555;
+        }
+
+        .btn-print:hover {
+            background-color: #e0e0e0;
+        }
+
+        .no-records {
+            text-align: center;
+            padding: 2rem;
+            color: #777;
+            font-size: 1.1rem;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+            gap: 0.5rem;
+        }
+
+        .page-item {
+            list-style: none;
+        }
+
+        .page-link {
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            color: var(--color-primary);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .page-link:hover {
+            background-color: #f5f5f5;
+        }
+
+        .page-link.active {
+            background-color: var(--color-primary);
+            color: white;
+            border-color: var(--color-primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .filter-row {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .filter-group {
+                min-width: 100%;
+            }
+            
+            .filter-actions {
+                justify-content: center;
+            }
+            
+            .record-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .record-actions {
+                justify-content: flex-start;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .medical-history-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .filter-actions {
+                width: 100%;
+            }
+            
+            .filter-btn {
+                flex: 1;
+                justify-content: center;
+            }
+            
+            .record-actions {
+                flex-direction: column;
+            }
+            
+            .record-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sistema Principal -->
+    <div id="app" class="app-container">
+        <header class="header">
+            <div>
+                <button id="menu-toggle" class="btn-menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <span id="current-module">Recepción</span>
+            </div>
+            <div>
+                <span id="user-name" style="margin-right: 1rem;"></span>
+                <button id="logout-btn" class="btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> Salir
+                </button>
+            </div>
+        </header>
+
+        <!-- Sidebar con submenús -->
+        <aside class="sidebar" id="sidebar">
+            <ul class="sidebar-menu" id="main-menu">
+                <li class="menu-title">Recepción</li>
+                
+                <li class="menu-item has-submenu" id="appointments-menu">
+                    <a href="#" class="menu-link">
+                        <i class="fas fa-calendar-alt menu-icon"></i>
+                        <span>Citas</span>
+                    </a>
+                    <ul class="submenu" id="appointments-submenu">
+                        <li class="menu-item" data-module="calendar-view">
+                            <a href="#" class="menu-link">
+                                <i class="fas fa-calendar-day menu-icon"></i>
+                                <span>Vista Calendario</span>
+                            </a>
+                        </li>
+                        <li class="menu-item" data-module="list-view">
+                            <a href="#" class="menu-link">
+                                <i class="fas fa-list menu-icon"></i>
+                                <span>Lista de Citas</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                
+                <li class="menu-item has-submenu" id="attention-menu">
+                    <a href="#" class="menu-link">
+                        <i class="fas fa-user-injured menu-icon"></i>
+                        <span>Atención</span>
+                    </a>
+                    <ul class="submenu" id="attention-submenu">
+                        <li class="menu-item" data-module="patient-register">
+                            <a href="#" class="menu-link">
+                                <i class="fas fa-user-plus menu-icon"></i>
+                                <span>Registro Pacientes</span>
+                            </a>
+                        </li>
+                        <li class="menu-item" data-module="attention-control">
+                            <a href="#" class="menu-link">
+                                <i class="fas fa-clipboard-check menu-icon"></i>
+                                <span>Control Atención</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                
+                <li class="menu-title">Historial</li>
+                <li class="menu-item" data-module="medical-history">
+                    <a href="#" class="menu-link">
+                        <i class="fas fa-file-medical menu-icon"></i>
+                        <span>Historial Médico</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Contenido Principal -->
+        <main class="main-content">
+            <!-- Módulo de Calendario -->
+            <div id="calendar-view-module" class="module">
+                <div class="calendar-toolbar">
+                    <h2>Calendario de Citas</h2>
+                
+                </div>
+                <div class="calendar-container">
+                    <div id="reception-calendar"></div>
+                </div>
+            </div>
+            
+            <!-- Módulo de Lista de Citas -->
+            <div id="list-view-module" class="module" style="display: none;">
+                <div class="appointments-list">
+                    <h2>Lista de Citas</h2>
+                    <div id="appointments-list-container">
+                        <!-- Las citas se cargarán aquí dinámicamente -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Módulo de Registro de Pacientes -->
+            <div id="patient-register-module" class="module" style="display: none;">
+                <div class="form-container">
+                    <h2>Registro de Nuevo Paciente</h2>
+                    <form id="patient-form">
+                        <div class="form-group">
+                            <label for="patient-name">Nombre Completo</label>
+                            <input type="text" id="patient-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="patient-id">Documento de Identidad</label>
+                            <input type="text" id="patient-id" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="patient-birthdate">Fecha de Nacimiento</label>
+                            <input type="date" id="patient-birthdate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="patient-gender">Género</label>
+                            <select id="patient-gender" required>
+                                <option value="">Seleccione...</option>
+                                <option value="M">Masculino</option>
+                                <option value="F">Femenino</option>
+                                <option value="O">Otro</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="patient-phone">Teléfono</label>
+                            <input type="tel" id="patient-phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="patient-email">Correo Electrónico</label>
+                            <input type="email" id="patient-email">
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" id="cancel-patient">
+                                <i class="fas fa-times"></i> Cancelar
+                            </button>
+                            <button type="submit" class="btn-primary">
+                                <i class="fas fa-save"></i> Registrar Paciente
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Módulo de Control de Atención -->
+            <div id="attention-control-module" class="module" style="display: none;">
+                <div class="appointments-list">
+                    <h2>Control de Atención</h2>
+                    <div id="attention-list-container">
+                        <!-- Las citas para atención se cargarán aquí dinámicamente -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Módulo de Historial Médico -->
+            <div id="medical-history-module" class="module">
+                <div class="medical-history-container">
+                    <div class="medical-history-header">
+                        <h2 class="medical-history-title">
+                            <i class="fas fa-file-medical"></i> Historial Médico
+                        </h2>
+                        <button class="btn-apply" onclick="showNewRecordModal()">
+                            <i class="fas fa-plus"></i> Nuevo Registro
+                        </button>
+                    </div>
+        
+                    <!-- Filtros de búsqueda -->
+                    <div class="filters-container">
+                        <h3 class="filters-title">
+                            <i class="fas fa-filter"></i> Filtros de Búsqueda
+                        </h3>
+                        
+                        <div class="filter-row">
+                            <div class="filter-group">
+                                <label for="filter-patient">Paciente</label>
+                                <input type="text" id="filter-patient" placeholder="Buscar por nombre o documento">
+                            </div>
+                            
+                            <div class="filter-group">
+                                <label for="filter-doctor">Médico</label>
+                                <select id="filter-doctor">
+                                    <option value="">Todos los médicos</option>
+                                    <option value="1">Dra. Ana López</option>
+                                    <option value="2">Dr. Carlos Rodríguez</option>
+                                    <option value="3">Dra. María Fernández</option>
+                                    <option value="4">Dr. Javier Martínez</option>
+                                </select>
+                            </div>
+                            
+                            <div class="filter-group">
+                                <label for="filter-specialty">Especialidad</label>
+                                <select id="filter-specialty">
+                                    <option value="">Todas las especialidades</option>
+                                    <option value="Medicina General">Medicina General</option>
+                                    <option value="Cardiología">Cardiología</option>
+                                    <option value="Pediatría">Pediatría</option>
+                                    <option value="Ortopedia">Ortopedia</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="filter-row">
+                            <div class="filter-group">
+                                <label for="filter-date-from">Fecha desde</label>
+                                <input type="date" id="filter-date-from">
+                            </div>
+                            
+                            <div class="filter-group">
+                                <label for="filter-date-to">Fecha hasta</label>
+                                <input type="date" id="filter-date-to">
+                            </div>
+                            
+                            <div class="filter-group">
+                                <label for="filter-diagnosis">Diagnóstico</label>
+                                <input type="text" id="filter-diagnosis" placeholder="Buscar por diagnóstico">
+                            </div>
+                        </div>
+                        
+                        <div class="filter-row">
+                            <div class="filter-group">
+                                <label for="filter-status">Estado</label>
+                                <select id="filter-status">
+                                    <option value="">Todos los estados</option>
+                                    <option value="Activo">Activo</option>
+                                    <option value="Resuelto">Resuelto</option>
+                                    <option value="Crónico">Crónico</option>
+                                    <option value="En seguimiento">En seguimiento</option>
+                                </select>
+                            </div>
+                            
+                            <div class="filter-group">
+                                <label for="filter-treatment">Tratamiento</label>
+                                <input type="text" id="filter-treatment" placeholder="Buscar por tratamiento">
+                            </div>
+                            
+                            <div class="filter-group">
+                                <label for="filter-allergies">Alergias</label>
+                                <select id="filter-allergies">
+                                    <option value="">Todas las alergias</option>
+                                    <option value="Ninguna">Ninguna</option>
+                                    <option value="Penicilina">Penicilina</option>
+                                    <option value="Mariscos">Mariscos</option>
+                                    <option value="Polvo">Polvo</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="filter-actions">
+                            <button class="btn-reset" onclick="resetFilters()">
+                                <i class="fas fa-undo"></i> Limpiar Filtros
+                            </button>
+                            <button class="btn-apply" onclick="applyFilters()">
+                                <i class="fas fa-search"></i> Aplicar Filtros
+                            </button>
+                        </div>
+                    </div>
+        
+                    <!-- Resultados del historial médico -->
+                    <div class="medical-records">
+                        <div class="record-card">
+                            <div class="record-header">
+                                <div>
+                                    <h3 class="record-patient">Juan Pérez (ID: 12345678)</h3>
+                                    <div class="record-doctor">Dra. Ana López - Medicina General</div>
+                                </div>
+                                <div class="record-date">15/05/2023 - 10:30 AM</div>
+                            </div>
+                            
+                            <div class="record-diagnosis">Hipertensión arterial primaria (I10)</div>
+                            
+                            <div class="record-details">
+                                <div class="detail-item">
+                                    <span class="detail-label">Síntomas:</span>
+                                    <span class="detail-value">Dolor de cabeza persistente, mareos ocasionales</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Tratamiento:</span>
+                                    <span class="detail-value">Losartán 50mg 1x día, dieta baja en sodio</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Alergias:</span>
+                                    <span class="detail-value">Ninguna</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Estado:</span>
+                                    <span class="detail-value" style="color: #f39c12; font-weight: 500;">En seguimiento</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Notas:</span>
+                                    <span class="detail-value">Controlar presión arterial semanalmente. Volver en 1 mes para reevaluación.</span>
+                                </div>
+                            </div>
+                            
+                            <div class="record-actions">
+                                <button class="record-btn btn-view">
+                                    <i class="fas fa-eye"></i> Ver Completo
+                                </button>
+                                <button class="record-btn btn-print">
+                                    <i class="fas fa-print"></i> Imprimir
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="record-card">
+                            <div class="record-header">
+                                <div>
+                                    <h3 class="record-patient">María Gómez (ID: 87654321)</h3>
+                                    <div class="record-doctor">Dr. Carlos Rodríguez - Cardiología</div>
+                                </div>
+                                <div class="record-date">10/05/2023 - 3:15 PM</div>
+                            </div>
+                            
+                            <div class="record-diagnosis">Dolor torácico atípico (R07.4)</div>
+                            
+                            <div class="record-details">
+                                <div class="detail-item">
+                                    <span class="detail-label">Síntomas:</span>
+                                    <span class="detail-value">Dolor en pecho intermitente, no relacionado con esfuerzo</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Tratamiento:</span>
+                                    <span class="detail-value">Electrocardiograma normal, recomendación de ejercicio moderado</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Alergias:</span>
+                                    <span class="detail-value">Penicilina</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Estado:</span>
+                                    <span class="detail-value" style="color: #2ecc71; font-weight: 500;">Resuelto</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Notas:</span>
+                                    <span class="detail-value">Posible origen musculoesquelético. Paciente fue derivado a fisioterapia.</span>
+                                </div>
+                            </div>
+                            
+                            <div class="record-actions">
+                                <button class="record-btn btn-view">
+                                    <i class="fas fa-eye"></i> Ver Completo
+                                </button>
+                                <button class="record-btn btn-print">
+                                    <i class="fas fa-print"></i> Imprimir
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="record-card">
+                            <div class="record-header">
+                                <div>
+                                    <h3 class="record-patient">Pedro Sánchez (ID: 45678912)</h3>
+                                    <div class="record-doctor">Dra. María Fernández - Pediatría</div>
+                                </div>
+                                <div class="record-date">05/05/2023 - 9:00 AM</div>
+                            </div>
+                            
+                            <div class="record-diagnosis">Asma bronquial (J45.909)</div>
+                            
+                            <div class="record-details">
+                                <div class="detail-item">
+                                    <span class="detail-label">Síntomas:</span>
+                                    <span class="detail-value">Tos seca, sibilancias, dificultad respiratoria nocturna</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Tratamiento:</span>
+                                    <span class="detail-value">Salbutamol inhalador según necesidad, Budesonide 200mcg 2x día</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Alergias:</span>
+                                    <span class="detail-value">Polvo, ácaros</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Estado:</span>
+                                    <span class="detail-value" style="color: #3498db; font-weight: 500;">Crónico</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Notas:</span>
+                                    <span class="detail-value">Educación sobre uso de inhaladores. Control ambiental para reducir alérgenos. Seguimiento cada 3 meses.</span>
+                                </div>
+                            </div>
+                            
+                            <div class="record-actions">
+                                <button class="record-btn btn-view">
+                                    <i class="fas fa-eye"></i> Ver Completo
+                                </button>
+                                <button class="record-btn btn-print">
+                                    <i class="fas fa-print"></i> Imprimir
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="record-card">
+                            <div class="record-header">
+                                <div>
+                                    <h3 class="record-patient">Laura Díaz (ID: 32165498)</h3>
+                                    <div class="record-doctor">Dr. Javier Martínez - Ortopedia</div>
+                                </div>
+                                <div class="record-date">28/04/2023 - 11:45 AM</div>
+                            </div>
+                            
+                            <div class="record-diagnosis">Esguince de tobillo grado II (S93.409A)</div>
+                            
+                            <div class="record-details">
+                                <div class="detail-item">
+                                    <span class="detail-label">Síntomas:</span>
+                                    <span class="detail-value">Dolor e inflamación en tobillo derecho, dificultad para caminar</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Tratamiento:</span>
+                                    <span class="detail-value">Reposo, hielo, compresión y elevación. Ibuprofeno 400mg cada 8h por 5 días</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Alergias:</span>
+                                    <span class="detail-value">Mariscos</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Estado:</span>
+                                    <span class="detail-value" style="color: #2ecc71; font-weight: 500;">Resuelto</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Notas:</span>
+                                    <span class="detail-value">Evitar deportes por 2 semanas. Uso de tobillera recomendado. Volver si persiste dolor después de 10 días.</span>
+                                </div>
+                            </div>
+                            
+                            <div class="record-actions">
+                                <button class="record-btn btn-view">
+                                    <i class="fas fa-eye"></i> Ver Completo
+                                </button>
+                                <button class="record-btn btn-print">
+                                    <i class="fas fa-print"></i> Imprimir
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <!-- Paginación -->
+                    <div class="pagination">
+                        <li class="page-item">
+                            <a href="#" class="page-link">
+                                <i class="fas fa-chevron-left"></i>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a href="#" class="page-link active">1</a>
+                        </li>
+                        <li class="page-item">
+                            <a href="#" class="page-link">2</a>
+                        </li>
+                        <li class="page-item">
+                            <a href="#" class="page-link">3</a>
+                        </li>
+                        <li class="page-item">
+                            <a href="#" class="page-link">
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                        </li>
+                    </div>
+                </div>
+            </div>
+        
+            <!-- Modal para nuevo registro -->
+            <div id="new-record-modal" class="modal-overlay" style="display: none;">
+                <div class="modal-content">
+                    <h3><i class="fas fa-file-medical"></i> Nuevo Registro Médico</h3>
+                    
+                    <div class="form-group" style="margin-top: 1.5rem;">
+                        <label for="new-record-patient">Paciente</label>
+                        <select id="new-record-patient" class="form-control" required>
+                            <option value="">Seleccione un paciente</option>
+                            <option value="1">Juan Pérez (12345678)</option>
+                            <option value="2">María Gómez (87654321)</option>
+                            <option value="3">Pedro Sánchez (45678912)</option>
+                            <option value="4">Laura Díaz (32165498)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="new-record-doctor">Médico</label>
+                        <select id="new-record-doctor" class="form-control" required>
+                            <option value="">Seleccione un médico</option>
+                            <option value="1">Dra. Ana López - Medicina General</option>
+                            <option value="2">Dr. Carlos Rodríguez - Cardiología</option>
+                            <option value="3">Dra. María Fernández - Pediatría</option>
+                            <option value="4">Dr. Javier Martínez - Ortopedia</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="new-record-date">Fecha y Hora</label>
+                        <input type="datetime-local" id="new-record-date" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="new-record-diagnosis">Diagnóstico (CIE-10)</label>
+                        <input type="text" id="new-record-diagnosis" class="form-control" placeholder="Ej: I10 - Hipertensión primaria" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="new-record-symptoms">Síntomas</label>
+                        <textarea id="new-record-symptoms" class="form-control" rows="3" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="new-record-treatment">Tratamiento</label>
+                        <textarea id="new-record-treatment" class="form-control" rows="3" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="new-record-status">Estado</label>
+                        <select id="new-record-status" class="form-control" required>
+                            <option value="">Seleccione estado</option>
+                            <option value="Activo">Activo</option>
+                            <option value="Resuelto">Resuelto</option>
+                            <option value="Crónico">Crónico</option>
+                            <option value="En seguimiento">En seguimiento</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="new-record-notes">Notas Adicionales</label>
+                        <textarea id="new-record-notes" class="form-control" rows="2"></textarea>
+                    </div>
+                    
+                    <div class="modal-actions">
+                        <button class="btn-close" onclick="closeNewRecordModal()">
+                            <i class="fas fa-times"></i> Cancelar
+                        </button>
+                        <button class="btn-confirm" onclick="saveNewRecord()">
+                            <i class="fas fa-save"></i> Guardar Registro
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js"></script>
+
+  <script>
+        // =============================================
+        // DATOS DE PRUEBA PARA DEMOSTRACIÓN
+        // =============================================
+        
+        // Doctores disponibles
+        const doctors = [
+            { id: 1, name: "Dra. Ana López", specialty: "Medicina General" },
+            { id: 2, name: "Dr. Carlos Rodríguez", specialty: "Cardiología" },
+            { id: 3, name: "Dra. María Fernández", specialty: "Pediatría" },
+            { id: 4, name: "Dr. Javier Martínez", specialty: "Ortopedia" }
+        ];
+        
+        // Pacientes de prueba
+        const patients = [
+            { 
+                id: 1, 
+                name: "Juan Pérez", 
+                idNumber: "12345678", 
+                birthdate: "1985-05-15", 
+                gender: "M", 
+                phone: "555-1234", 
+                email: "juan@example.com",
+                address: "Calle Principal 123",
+                bloodType: "A+",
+                allergies: "Ninguna"
+            },
+            { 
+                id: 2, 
+                name: "María Gómez", 
+                idNumber: "87654321", 
+                birthdate: "1990-08-22", 
+                gender: "F", 
+                phone: "555-5678", 
+                email: "maria@example.com",
+                address: "Avenida Central 456",
+                bloodType: "O-",
+                allergies: "Penicilina"
+            },
+            { 
+                id: 3, 
+                name: "Pedro Sánchez", 
+                idNumber: "45678912", 
+                birthdate: "1978-11-30", 
+                gender: "M", 
+                phone: "555-9012", 
+                email: "pedro@example.com",
+                address: "Boulevard Norte 789",
+                bloodType: "B+",
+                allergies: "Polvo, ácaros"
+            },
+            { 
+                id: 4, 
+                name: "Laura Díaz", 
+                idNumber: "32165498", 
+                birthdate: "1995-03-10", 
+                gender: "F", 
+                phone: "555-3456", 
+                email: "laura@example.com",
+                address: "Calle Sur 101",
+                bloodType: "AB+",
+                allergies: "Mariscos"
+            }
+        ];
+        
+        // Tipos de consulta
+        const appointmentTypes = [
+            "Consulta General", "Control", "Examen", "Emergencia", "Cirugía", "Terapia"
+        ];
+        
+        // Citas de prueba
+        let appointments = [
+            {
+                id: 1,
+                patientId: 1,
+                doctorId: 1,
+                type: "Consulta General",
+                start: moment().set({hour: 9, minute: 0}).format(),
+                end: moment().set({hour: 9, minute: 30}).format(),
+                status: "confirmada",
+                notes: "Paciente con dolor de cabeza persistente",
+                createdAt: moment().subtract(3, 'days').format()
+            },
+            {
+                id: 2,
+                patientId: 2,
+                doctorId: 2,
+                type: "Control",
+                start: moment().set({hour: 11, minute: 0}).format(),
+                end: moment().set({hour: 11, minute: 30}).format(),
+                status: "pendiente",
+                notes: "Control postoperatorio",
+                createdAt: moment().subtract(2, 'days').format()
+            },
+            {
+                id: 3,
+                patientId: 3,
+                doctorId: 3,
+                type: "Examen",
+                start: moment().add(1, 'days').set({hour: 14, minute: 0}).format(),
+                end: moment().add(1, 'days').set({hour: 15, minute: 0}).format(),
+                status: "confirmada",
+                notes: "Análisis de sangre y orina",
+                createdAt: moment().subtract(1, 'days').format()
+            },
+            {
+                id: 4,
+                patientId: 4,
+                doctorId: 4,
+                type: "Consulta General",
+                start: moment().add(2, 'days').set({hour: 10, minute: 0}).format(),
+                end: moment().add(2, 'days').set({hour: 10, minute: 30}).format(),
+                status: "pendiente",
+                notes: "Dolor en la rodilla derecha",
+                createdAt: moment().subtract(4, 'days').format()
+            },
+            {
+                id: 5,
+                patientId: 1,
+                doctorId: 2,
+                type: "Control",
+                start: moment().add(3, 'days').set({hour: 16, minute: 0}).format(),
+                end: moment().add(3, 'days').set({hour: 16, minute: 30}).format(),
+                status: "confirmada",
+                notes: "Revisión de presión arterial",
+                createdAt: moment().subtract(5, 'days').format()
+            },
+            {
+                id: 6,
+                patientId: 2,
+                doctorId: 1,
+                type: "Consulta General",
+                start: moment().add(1, 'days').set({hour: 16, minute: 0}).format(),
+                end: moment().add(1, 'days').set({hour: 16, minute: 30}).format(),
+                status: "pendiente",
+                notes: "Revisión anual",
+                createdAt: moment().subtract(2, 'days').format()
+            }
+        ];
+        
+        // =============================================
+        // FUNCIONES DEL SISTEMA
+        // =============================================
+        
+        // Inicialización del sistema
+        function initReceptionSystem() {
+            // Configurar menús desplegables
+            $('.has-submenu > .menu-link').click(function(e) {
+                e.preventDefault();
+                const parent = $(this).parent();
+                
+                // Cerrar otros submenús
+                $('.has-submenu').not(parent).removeClass('active');
+                $('.submenu').not(parent.find('.submenu')).removeClass('show');
+                
+                // Alternar el submenú actual
+                parent.toggleClass('active');
+                parent.find('.submenu').toggleClass('show');
+                
+                // Si es el submenú de Citas, mostrar el calendario por defecto
+                if(parent.attr('id') === 'appointments-menu') {
+                    showModule('calendar-view');
+                }
+                
+                // Si es el submenú de Atención, mostrar registro de pacientes
+                if(parent.attr('id') === 'attention-menu') {
+                    showModule('patient-register');
+                }
+            });
+            
+            // Inicializar calendario
+            initReceptionCalendar();
+            
+            // Cargar lista de citas
+            loadAppointmentsList();
+            
+            // Cargar lista de atención
+            loadAttentionList();
+            
+            // Configurar eventos de módulos
+            $('.menu-item[data-module]').click(function() {
+                const module = $(this).data('module');
+                showModule(module);
+            });
+            
+            // Configurar formulario de paciente
+            $('#patient-form').submit(function(e) {
+                e.preventDefault();
+                registerNewPatient();
+            });
+            
+            $('#cancel-patient').click(function() {
+                $('#patient-form')[0].reset();
+            });
+            
+            // Mostrar el módulo de calendario por defecto
+            showModule('calendar-view');
+        }
+        
+        // Calendario avanzado para recepción
+        function initReceptionCalendar() {
+            const calendarEl = document.getElementById('reception-calendar');
+            const calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                locale: 'es',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                buttonText: {
+                    today: 'Hoy',
+                    month: 'Mes',
+                    week: 'Semana',
+                    day: 'Día'
+                },
+                firstDay: 1, // Lunes como primer día de la semana
+                navLinks: true, // Permite hacer clic en fechas/días para navegar
+                dayMaxEvents: true, // Muestra un enlace "más" cuando hay muchos eventos
+                eventDisplay: 'block',
+                events: appointments.map(app => {
+                    const patient = patients.find(p => p.id === app.patientId);
+                    const doctor = doctors.find(d => d.id === app.doctorId);
+                    
+                    return {
+                        id: app.id,
+                        title: `${patient.name} - ${doctor.name}`,
+                        start: app.start,
+                        end: app.end,
+                        extendedProps: {
+                            patient: patient.name,
+                            patientId: patient.id,
+                            doctor: doctor.name,
+                            doctorId: doctor.id,
+                            status: app.status,
+                            type: app.type,
+                            notes: app.notes,
+                            createdAt: app.createdAt
+                        },
+                        color: getStatusColor(app.status),
+                        textColor: '#333'
+                    };
+                }),
+                eventContent: function(arg) {
+                    const statusColor = getStatusColor(arg.event.extendedProps.status);
+                    return {
+                        html: `
+                            <div class="fc-event-main" style="border-left: 3px solid ${statusColor}; padding-left: 8px;">
+                                <div class="fc-event-time">${moment(arg.event.start).format('HH:mm')}</div>
+                                <div class="fc-event-title">${arg.event.extendedProps.patient}</div>
+                                <div class="fc-event-doctor">${arg.event.extendedProps.doctor}</div>
+                                <div class="fc-event-status" style="color: ${statusColor}">
+                                    ${arg.event.extendedProps.status.toUpperCase()}
+                                </div>
+                            </div>
+                        `
+                    };
+                },
+                eventClick: function(info) {
+                    showAppointmentDetails(info.event);
+                },
+                dateClick: function(info) {
+                    if(info.view.type === 'timeGridDay' || info.view.type === 'timeGridWeek') {
+                        showNewAppointmentForm(info.date);
+                    }
+                },
+                eventDidMount: function(info) {
+                    // Efecto de tooltip para mostrar más información
+                    $(info.el).attr('title', 
+                        `Paciente: ${info.event.extendedProps.patient}\n` +
+                        `Médico: ${info.event.extendedProps.doctor}\n` +
+                        `Tipo: ${info.event.extendedProps.type}\n` +
+                        `Hora: ${moment(info.event.start).format('HH:mm')} - ${moment(info.event.end).format('HH:mm')}`
+                    );
+                }
+            });
+
+            calendar.render();
+            
+            // Cambiar vista del calendario
+            $('.view-option').click(function() {
+                $('.view-option').removeClass('active');
+                $(this).addClass('active');
+                calendar.changeView($(this).data('view'));
+            });
+        }
+        
+        // Mostrar formulario para nueva cita
+        function showNewAppointmentForm(date) {
+            const modalHtml = `
+                <div class="modal-overlay">
+                    <div class="modal-content">
+                        <h3>Nueva Cita</h3>
+                        <div class="form-group">
+                            <label for="new-appointment-patient">Paciente</label>
+                            <select id="new-appointment-patient" class="form-control" required>
+                                <option value="">Seleccione un paciente</option>
+                                ${patients.map(p => `<option value="${p.id}">${p.name} (${p.idNumber})</option>`).join('')}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="new-appointment-doctor">Médico</label>
+                            <select id="new-appointment-doctor" class="form-control" required>
+                                <option value="">Seleccione un médico</option>
+                                ${doctors.map(d => `<option value="${d.id}">${d.name} (${d.specialty})</option>`).join('')}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="new-appointment-type">Tipo de Consulta</label>
+                            <select id="new-appointment-type" class="form-control" required>
+                                <option value="">Seleccione un tipo</option>
+                                ${appointmentTypes.map(t => `<option value="${t}">${t}</option>`).join('')}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="new-appointment-date">Fecha</label>
+                            <input type="datetime-local" id="new-appointment-date" 
+                                   value="${moment(date).format('YYYY-MM-DDTHH:mm')}" 
+                                   min="${moment().format('YYYY-MM-DDTHH:mm')}" 
+                                   class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="new-appointment-duration">Duración (minutos)</label>
+                            <input type="number" id="new-appointment-duration" value="30" min="15" max="120" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="new-appointment-notes">Notas</label>
+                            <textarea id="new-appointment-notes" class="form-control" rows="3"></textarea>
+                        </div>
+                        <div class="modal-actions">
+                            <button type="button" class="btn-close" onclick="$('.modal-overlay').remove()">
+                                <i class="fas fa-times"></i> Cancelar
+                            </button>
+                            <button type="button" class="btn-confirm" onclick="saveNewAppointment()">
+                                <i class="fas fa-save"></i> Guardar Cita
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            $('body').append(modalHtml);
+        }
+        
+        // Guardar nueva cita
+        function saveNewAppointment() {
+            const patientId = parseInt($('#new-appointment-patient').val());
+            const doctorId = parseInt($('#new-appointment-doctor').val());
+            const type = $('#new-appointment-type').val();
+            const start = $('#new-appointment-date').val();
+            const duration = parseInt($('#new-appointment-duration').val());
+            const notes = $('#new-appointment-notes').val();
+            
+            if (!patientId || !doctorId || !type || !start || !duration) {
+                alert('Por favor complete todos los campos requeridos');
+                return;
+            }
+            
+            const newAppointment = {
+                id: appointments.length > 0 ? Math.max(...appointments.map(a => a.id)) + 1 : 1,
+                patientId,
+                doctorId,
+                type,
+                start: moment(start).format(),
+                end: moment(start).add(duration, 'minutes').format(),
+                status: "pendiente",
+                notes,
+                createdAt: moment().format()
+            };
+            
+            appointments.push(newAppointment);
+            
+            // Actualizar calendario
+            $('#reception-calendar').fullCalendar('refetchEvents');
+            
+            // Cerrar modal
+            $('.modal-overlay').remove();
+            
+            // Mostrar mensaje de éxito
+            const patient = patients.find(p => p.id === patientId);
+            const doctor = doctors.find(d => d.id === doctorId);
+            
+            alert(`Cita creada exitosamente para:\n\nPaciente: ${patient.name}\nMédico: ${doctor.name}\nFecha: ${moment(newAppointment.start).format('DD/MM/YYYY HH:mm')}`);
+            
+            // Redirigir a la lista de citas
+            showModule('list-view');
+        }
+        
+        // Cargar lista de citas
+        function loadAppointmentsList() {
+            const container = $('#appointments-list-container');
+            container.empty();
+            
+            // Ordenar citas por fecha (más recientes primero)
+            const sortedAppointments = [...appointments].sort((a, b) => 
+                new Date(b.start) - new Date(a.start));
+            
+            if (sortedAppointments.length === 0) {
+                container.append('<p class="no-appointments">No hay citas programadas.</p>');
+                return;
+            }
+            
+            sortedAppointments.forEach(app => {
+                const patient = patients.find(p => p.id === app.patientId);
+                const doctor = doctors.find(d => d.id === app.doctorId);
+                const statusColor = getStatusColor(app.status);
+                
+                const card = `
+                    <div class="appointment-card" data-id="${app.id}">
+                        <div class="appointment-header">
+                            <span class="appointment-time">
+                                ${moment(app.start).format('DD/MM/YYYY HH:mm')} - ${moment(app.end).format('HH:mm')}
+                            </span>
+                            <span class="appointment-status" style="background-color: ${statusColor}; color: white;">
+                                ${app.status.toUpperCase()}
+                            </span>
+                        </div>
+                        <div class="appointment-patient">
+                            <i class="fas fa-user"></i> ${patient.name}
+                        </div>
+                        <div class="appointment-doctor">
+                            <i class="fas fa-user-md"></i> ${doctor.name} - ${app.type}
+                        </div>
+                        <div class="appointment-actions">
+                            <button class="btn-confirm" onclick="changeAppointmentStatus(${app.id}, 'confirmada')">
+                                <i class="fas fa-check"></i> Confirmar
+                            </button>
+                            <button class="btn-cancel" onclick="changeAppointmentStatus(${app.id}, 'cancelada')">
+                                <i class="fas fa-times"></i> Cancelar
+                            </button>
+                            <button onclick="showAppointmentDetailsById(${app.id})">
+                                <i class="fas fa-info-circle"></i> Detalles
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                container.append(card);
+            });
+        }
+        
+        // Cargar lista de atención
+        function loadAttentionList() {
+            const container = $('#attention-list-container');
+            container.empty();
+            
+            // Filtrar citas para hoy y ordenar por hora
+            const todayAppointments = appointments
+                .filter(app => moment(app.start).isSame(moment(), 'day'))
+                .sort((a, b) => new Date(a.start) - new Date(b.start));
+            
+            if (todayAppointments.length === 0) {
+                container.append('<p class="no-appointments">No hay citas programadas para hoy.</p>');
+                return;
+            }
+            
+            todayAppointments.forEach(app => {
+                const patient = patients.find(p => p.id === app.patientId);
+                const doctor = doctors.find(d => d.id === app.doctorId);
+                const statusColor = getStatusColor(app.status);
+                
+                const card = `
+                    <div class="appointment-card" data-id="${app.id}">
+                        <div class="appointment-header">
+                            <span class="appointment-time">
+                                ${moment(app.start).format('HH:mm')} - ${moment(app.end).format('HH:mm')}
+                            </span>
+                            <span class="appointment-status" style="background-color: ${statusColor}; color: white;">
+                                ${app.status.toUpperCase()}
+                            </span>
+                        </div>
+                        <div class="appointment-patient">
+                            <i class="fas fa-user"></i> ${patient.name}
+                        </div>
+                        <div class="appointment-doctor">
+                            <i class="fas fa-user-md"></i> ${doctor.name} - ${app.type}
+                        </div>
+                        <div class="appointment-actions">
+                            <button class="btn-confirm" onclick="completeAppointment(${app.id})">
+                                <i class="fas fa-check-circle"></i> Atendido
+                            </button>
+                            <button onclick="showPatientDetails(${patient.id})">
+                                <i class="fas fa-id-card"></i> Ver Paciente
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                container.append(card);
+            });
+        }
+        
+        // Registrar nuevo paciente
+        function registerNewPatient() {
+            const newPatient = {
+                id: patients.length > 0 ? Math.max(...patients.map(p => p.id)) + 1 : 1,
+                name: $('#patient-name').val(),
+                idNumber: $('#patient-id').val(),
+                birthdate: $('#patient-birthdate').val(),
+                gender: $('#patient-gender').val(),
+                phone: $('#patient-phone').val(),
+                email: $('#patient-email').val(),
+                address: '',
+                bloodType: '',
+                allergies: ''
+            };
+            
+            if (!newPatient.name || !newPatient.idNumber || !newPatient.birthdate || !newPatient.gender || !newPatient.phone) {
+                alert('Por favor complete todos los campos requeridos');
+                return;
+            }
+            
+            patients.push(newPatient);
+            $('#patient-form')[0].reset();
+            
+            // Mostrar modal de confirmación
+            const modalHtml = `
+                <div class="modal-overlay">
+                    <div class="modal-content">
+                        <h3>Paciente Registrado</h3>
+                        <div class="detail-row">
+                            <span class="detail-label">ID Paciente:</span>
+                            <span class="detail-value">${newPatient.id}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Nombre:</span>
+                            <span class="detail-value">${newPatient.name}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Documento:</span>
+                            <span class="detail-value">${newPatient.idNumber}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Teléfono:</span>
+                            <span class="detail-value">${newPatient.phone}</span>
+                        </div>
+                        <div class="modal-actions">
+                            <button class="btn-close" onclick="$('.modal-overlay').remove()">
+                                <i class="fas fa-times"></i> Cerrar
+                            </button>
+                            <button class="btn-primary" onclick="showModule('attention-control'); $('.modal-overlay').remove()">
+                                <i class="fas fa-clipboard-list"></i> Ir a Control de Atención
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            $('body').append(modalHtml);
+        }
+        
+        // Mostrar detalles de cita
+        function showAppointmentDetails(event) {
+            const patient = patients.find(p => p.name === event.extendedProps.patient);
+            const doctor = doctors.find(d => d.name === event.extendedProps.doctor);
+            const statusColor = getStatusColor(event.extendedProps.status);
+            
+            const modalHtml = `
+                <div class="modal-overlay">
+                    <div class="modal-content">
+                        <h3>Detalles de la Cita</h3>
+                        <div class="detail-row">
+                            <span class="detail-label">ID Cita:</span>
+                            <span class="detail-value">${event.id}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Paciente:</span>
+                            <span class="detail-value">${event.extendedProps.patient}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Documento:</span>
+                            <span class="detail-value">${patient.idNumber}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Médico:</span>
+                            <span class="detail-value">${event.extendedProps.doctor} (${doctor.specialty})</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Fecha/Hora:</span>
+                            <span class="detail-value">
+                                ${moment(event.start).format('dddd, DD [de] MMMM [de] YYYY [a las] HH:mm')} - 
+                                ${moment(event.end).format('HH:mm')}
+                            </span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Tipo:</span>
+                            <span class="detail-value">${event.extendedProps.type}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Estado:</span>
+                            <span class="detail-value" style="color: ${statusColor}">
+                                ${event.extendedProps.status.toUpperCase()}
+                            </span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Notas:</span>
+                            <span class="detail-value">${event.extendedProps.notes || 'Ninguna'}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Creada el:</span>
+                            <span class="detail-value">${moment(event.extendedProps.createdAt).format('DD/MM/YYYY HH:mm')}</span>
+                        </div>
+                        <div class="modal-actions">
+                            <button class="btn-confirm" onclick="changeAppointmentStatus(${event.id}, 'confirmada', 'list-view')">
+                                <i class="fas fa-check"></i> Confirmar
+                            </button>
+                            <button class="btn-cancel" onclick="changeAppointmentStatus(${event.id}, 'cancelada', 'list-view')">
+                                <i class="fas fa-times"></i> Cancelar
+                            </button>
+                            <button class="btn-close" onclick="$('.modal-overlay').remove()">
+                                <i class="fas fa-times"></i> Cerrar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            $('body').append(modalHtml);
+        }
+        
+        // Mostrar detalles de cita por ID
+        function showAppointmentDetailsById(appointmentId) {
+            const appointment = appointments.find(a => a.id === appointmentId);
+            if (!appointment) return;
+            
+            const patient = patients.find(p => p.id === appointment.patientId);
+            const doctor = doctors.find(d => d.id === appointment.doctorId);
+            const statusColor = getStatusColor(appointment.status);
+            
+            const modalHtml = `
+                <div class="modal-overlay">
+                    <div class="modal-content">
+                        <h3>Detalles de la Cita</h3>
+                        <div class="detail-row">
+                            <span class="detail-label">ID Cita:</span>
+                            <span class="detail-value">${appointment.id}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Paciente:</span>
+                            <span class="detail-value">${patient.name}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Documento:</span>
+                            <span class="detail-value">${patient.idNumber}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Médico:</span>
+                            <span class="detail-value">${doctor.name} (${doctor.specialty})</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Fecha/Hora:</span>
+                            <span class="detail-value">
+                                ${moment(appointment.start).format('dddd, DD [de] MMMM [de] YYYY [a las] HH:mm')} - 
+                                ${moment(appointment.end).format('HH:mm')}
+                            </span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Tipo:</span>
+                            <span class="detail-value">${appointment.type}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Estado:</span>
+                            <span class="detail-value" style="color: ${statusColor}">
+                                ${appointment.status.toUpperCase()}
+                            </span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Notas:</span>
+                            <span class="detail-value">${appointment.notes || 'Ninguna'}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Creada el:</span>
+                            <span class="detail-value">${moment(appointment.createdAt).format('DD/MM/YYYY HH:mm')}</span>
+                        </div>
+                        <div class="modal-actions">
+                            <button class="btn-confirm" onclick="changeAppointmentStatus(${appointment.id}, 'confirmada', 'list-view')">
+                                <i class="fas fa-check"></i> Confirmar
+                            </button>
+                            <button class="btn-cancel" onclick="changeAppointmentStatus(${appointment.id}, 'cancelada', 'list-view')">
+                                <i class="fas fa-times"></i> Cancelar
+                            </button>
+                            <button class="btn-close" onclick="$('.modal-overlay').remove()">
+                                <i class="fas fa-times"></i> Cerrar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            $('body').append(modalHtml);
+        }
+        
+        // Mostrar detalles del paciente
+        function showPatientDetails(patientId) {
+            const patient = patients.find(p => p.id === patientId);
+            if (!patient) return;
+            
+            const patientAppointments = appointments.filter(a => a.patientId === patientId)
+                .sort((a, b) => new Date(b.start) - new Date(a.start));
+            
+            let appointmentsHtml = '<p>No tiene citas registradas.</p>';
+            if (patientAppointments.length > 0) {
+                appointmentsHtml = '<div class="patient-appointments-list">';
+                patientAppointments.forEach(app => {
+                    const doctor = doctors.find(d => d.id === app.doctorId);
+                    const statusColor = getStatusColor(app.status);
+                    
+                    appointmentsHtml += `
+                        <div class="patient-appointment-item">
+                            <div class="patient-appointment-header">
+                                <span>${moment(app.start).format('DD/MM/YYYY')}</span>
+                                <span style="color: ${statusColor}">${app.status.toUpperCase()}</span>
+                            </div>
+                            <div class="patient-appointment-details">
+                                <strong>${doctor.name}</strong> - ${app.type}
+                            </div>
+                            <button onclick="showAppointmentDetailsById(${app.id})" class="btn-small">
+                                <i class="fas fa-eye"></i> Ver detalles
+                            </button>
+                        </div>
+                    `;
+                });
+                appointmentsHtml += '</div>';
+            }
+            
+            const modalHtml = `
+                <div class="modal-overlay">
+                    <div class="modal-content">
+                        <h3>Información del Paciente</h3>
+                        <div class="detail-row">
+                            <span class="detail-label">ID:</span>
+                            <span class="detail-value">${patient.id}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Nombre:</span>
+                            <span class="detail-value">${patient.name}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Documento:</span>
+                            <span class="detail-value">${patient.idNumber}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Fecha Nac.:</span>
+                            <span class="detail-value">${moment(patient.birthdate).format('DD/MM/YYYY')} (${moment().diff(patient.birthdate, 'years')} años)</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Género:</span>
+                            <span class="detail-value">${patient.gender === 'M' ? 'Masculino' : patient.gender === 'F' ? 'Femenino' : 'Otro'}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Teléfono:</span>
+                            <span class="detail-value">${patient.phone}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Email:</span>
+                            <span class="detail-value">${patient.email || 'No registrado'}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Dirección:</span>
+                            <span class="detail-value">${patient.address || 'No registrada'}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Tipo de sangre:</span>
+                            <span class="detail-value">${patient.bloodType || 'No registrado'}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Alergias:</span>
+                            <span class="detail-value">${patient.allergies || 'Ninguna registrada'}</span>
+                        </div>
+                        <div style="margin-top: 1.5rem;">
+                            <h4>Historial de Citas (${patientAppointments.length})</h4>
+                            ${appointmentsHtml}
+                        </div>
+                        <div class="modal-actions">
+                            <button class="btn-primary" onclick="showModule('patient-register'); $('.modal-overlay').remove()">
+                                <i class="fas fa-edit"></i> Editar Paciente
+                            </button>
+                            <button class="btn-close" onclick="$('.modal-overlay').remove()">
+                                <i class="fas fa-times"></i> Cerrar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            $('body').append(modalHtml);
+        }
+        
+        // Cambiar estado de una cita y redirigir
+        function changeAppointmentStatus(appointmentId, newStatus, redirectTo = null) {
+            const appointmentIndex = appointments.findIndex(a => a.id === appointmentId);
+            if (appointmentIndex === -1) return;
+            
+            appointments[appointmentIndex].status = newStatus;
+            
+            // Actualizar calendario
+            $('#reception-calendar').fullCalendar('refetchEvents');
+            
+            // Actualizar listas
+            loadAppointmentsList();
+            loadAttentionList();
+            
+            // Cerrar modal si está abierto
+            $('.modal-overlay').remove();
+            
+            // Mostrar notificación
+            const appointment = appointments[appointmentIndex];
+            const patient = patients.find(p => p.id === appointment.patientId);
+            
+            alert(`Cita con ${patient.name} actualizada a: ${newStatus.toUpperCase()}`);
+            
+            // Redirigir si se especificó
+            if (redirectTo) {
+                showModule(redirectTo);
+            }
+        }
+        
+        // Marcar cita como completada
+        function completeAppointment(appointmentId) {
+            changeAppointmentStatus(appointmentId, 'completada', 'attention-control');
+        }
+        
+        // Mostrar módulo específico
+        function showModule(moduleId) {
+            // Ocultar todos los módulos primero
+            $('.module').hide();
+            
+            // Mostrar el módulo seleccionado
+            $(`#${moduleId}-module`).show();
+            
+            // Actualizar título en el header
+            const moduleTitles = {
+                'calendar-view': 'Calendario de Citas',
+                'list-view': 'Lista de Citas',
+                'patient-register': 'Registro de Pacientes',
+                'attention-control': 'Control de Atención',
+                'medical-history': 'Historial Médico'
+            };
+            
+            $('#current-module').text(moduleTitles[moduleId] || 'Recepción');
+            
+            // Actualizar datos si es necesario
+            if (moduleId === 'list-view') {
+                loadAppointmentsList();
+            } else if (moduleId === 'attention-control') {
+                loadAttentionList();
+            }
+            
+            // Cerrar el menú en móviles
+            if ($(window).width() <= 768) {
+                $('#sidebar').removeClass('active');
+            }
+        }
+        
+        // Obtener color según estado
+        function getStatusColor(status) {
+            switch(status) {
+                case 'confirmada': return '#2ecc71';
+                case 'pendiente': return '#f39c12';
+                case 'cancelada': return '#e74c3c';
+                case 'completada': return '#3498db';
+                default: return '#95a5a6';
+            }
+        }
+        
+        // Menu toggle para móviles
+        $('#menu-toggle').click(function() {
+            $('#sidebar').toggleClass('active');
+        });
+
+        // Simular login de recepción (eliminar en producción)
+        $(document).ready(function() {
+            $('#app').show();
+            $('#user-name').text('Recepcionista: Ana García');
+            initReceptionSystem();
+        });
+        function showNewRecordModal() {
+            $('#new-record-modal').show();
+            $('#new-record-date').val(new Date().toISOString().slice(0, 16));
+        }
+        
+        // Función para cerrar el modal
+        function closeNewRecordModal() {
+            $('#new-record-modal').hide();
+        }
+        
+        // Función para guardar nuevo registro
+        function saveNewRecord() {
+            const patientId = $('#new-record-patient').val();
+            const doctorId = $('#new-record-doctor').val();
+            const date = $('#new-record-date').val();
+            const diagnosis = $('#new-record-diagnosis').val();
+            const symptoms = $('#new-record-symptoms').val();
+            const treatment = $('#new-record-treatment').val();
+            const status = $('#new-record-status').val();
+            const notes = $('#new-record-notes').val();
+            
+            if (!patientId || !doctorId || !date || !diagnosis || !symptoms || !treatment || !status) {
+                alert('Por favor complete todos los campos requeridos');
+                return;
+            }
+            
+            // Aquí iría la lógica para guardar el registro en la base de datos
+            alert('Registro médico guardado exitosamente');
+            closeNewRecordModal();
+            
+            // Recargar la lista de registros
+            applyFilters();
+        }
+        
+        // Función para aplicar filtros
+        function applyFilters() {
+            const patient = $('#filter-patient').val();
+            const doctor = $('#filter-doctor').val();
+            const specialty = $('#filter-specialty').val();
+            const dateFrom = $('#filter-date-from').val();
+            const dateTo = $('#filter-date-to').val();
+            const diagnosis = $('#filter-diagnosis').val();
+            const status = $('#filter-status').val();
+            const treatment = $('#filter-treatment').val();
+            const allergies = $('#filter-allergies').val();
+            
+            // Aquí iría la lógica para filtrar los registros
+            console.log('Filtrando con:', {
+                patient, doctor, specialty, dateFrom, dateTo, 
+                diagnosis, status, treatment, allergies
+            });
+            
+            alert('Filtros aplicados correctamente');
+        }
+        
+        // Función para resetear filtros
+        function resetFilters() {
+            $('#filter-patient').val('');
+            $('#filter-doctor').val('');
+            $('#filter-specialty').val('');
+            $('#filter-date-from').val('');
+            $('#filter-date-to').val('');
+            $('#filter-diagnosis').val('');
+            $('#filter-status').val('');
+            $('#filter-treatment').val('');
+            $('#filter-allergies').val('');
+            
+            // Aquí iría la lógica para mostrar todos los registros nuevamente
+            alert('Filtros limpiados, mostrando todos los registros');
+        }
+        
+        // Inicialización
+        $(document).ready(function() {
+            // Establecer fecha "hasta" como hoy por defecto
+            $('#filter-date-to').val(new Date().toISOString().split('T')[0]);
+            
+            // Establecer fecha "desde" como un mes atrás por defecto
+            const oneMonthAgo = new Date();
+            oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+            $('#filter-date-from').val(oneMonthAgo.toISOString().split('T')[0]);
+        });
+
+    </script>
+</body>
+</html>
