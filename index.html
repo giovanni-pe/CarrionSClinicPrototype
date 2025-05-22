@@ -7,38 +7,35 @@
     <title>SaludPlus - Reserva Médica Premium</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Colores corporativos */
-            --color-primary: #0057B8;
-            /* Azul corporativo */
-            --color-primary-light: #3A86FF;
-            /* Azul claro */
-            --color-primary-dark: #003D82;
-            /* Azul oscuro */
-            --color-secondary: #00C4B3;
-            /* Turquesa */
+            /* Colores actualizados */
+            --color-primary: #0066CC;
+            --color-primary-light: #4D94FF;
+            --color-primary-dark: #004499;
+            --color-secondary: #00D4AA;
             --color-accent: #FF6B6B;
-            /* Coral */
-            --color-success: #4CAF50;
-            /* Verde */
-            --color-warning: #FFC107;
-            /* Amarillo */
-            --color-dark: #2D3047;
-            /* Azul marino */
-            --color-light: #F8F9FA;
-            /* Gris claro */
+            --color-success: #00C851;
+            --color-warning: #FFB000;
+            --color-error: #FF3547;
+            --color-dark: #2C3E50;
+            --color-light: #F8FAFC;
             --color-white: #FFFFFF;
-            /* Blanco */
+            --color-gray-100: #F1F5F9;
+            --color-gray-200: #E2E8F0;
+            --color-gray-300: #CBD5E1;
+            --color-gray-400: #94A3B8;
+            --color-gray-500: #64748B;
+            --color-gray-600: #475569;
+            --color-gray-700: #334155;
+            --color-gray-800: #1E293B;
+            --color-gray-900: #0F172A;
 
             /* Texto */
-            --text-primary: #212529;
-            /* Texto principal */
-            --text-secondary: #6C757D;
-            /* Texto secundario */
-            --text-light: #F8F9FA;
-            /* Texto claro */
+            --text-primary: #1E293B;
+            --text-secondary: #64748B;
+            --text-light: #F8FAFC;
 
             /* Espaciado */
             --spacing-xs: 4px;
@@ -49,21 +46,21 @@
             --spacing-xxl: 48px;
 
             /* Bordes */
-            --border-radius-sm: 4px;
-            --border-radius: 8px;
-            --border-radius-lg: 12px;
-            --border-radius-xl: 16px;
+            --border-radius-sm: 6px;
+            --border-radius: 12px;
+            --border-radius-lg: 16px;
+            --border-radius-xl: 24px;
 
             /* Sombras */
-            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
-            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.08);
             --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
-            --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 25px 50px rgba(0, 0, 0, 0.15);
 
             /* Transiciones */
-            --transition-fast: 0.15s ease;
-            --transition-medium: 0.3s ease;
-            --transition-slow: 0.45s ease;
+            --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-medium: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * {
@@ -74,14 +71,15 @@
         }
 
         body {
-            font-family: 'Roboto', sans-serif;
-            background-color: var(--color-light);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #F8FAFC 0%, #E2E8F0 100%);
             color: var(--text-primary);
             line-height: 1.6;
             overflow-x: hidden;
+            padding-bottom: 80px; /* Espacio para barra inferior móvil */
         }
 
-        /* Header premium */
+        /* Header mejorado */
         .app-header {
             background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
             color: var(--text-light);
@@ -89,7 +87,8 @@
             position: sticky;
             top: 0;
             z-index: 1000;
-            box-shadow: var(--shadow-md);
+            box-shadow: var(--shadow-lg);
+            backdrop-filter: blur(20px);
         }
 
         .header-container {
@@ -105,69 +104,113 @@
             align-items: center;
             gap: var(--spacing-sm);
             font-weight: 700;
-            font-size: 1.25rem;
+            font-size: 1.35rem;
         }
 
         .logo-icon {
-            font-size: 1.5rem;
+            font-size: 1.75rem;
             color: var(--color-secondary);
+            animation: pulse 2s infinite;
         }
 
-        .user-actions {
-            display: flex;
-            gap: var(--spacing-md);
-            align-items: center;
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
-        .user-icon {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-
-        /* Barra de búsqueda */
-        .search-bar {
-            padding: var(--spacing-md) var(--spacing-lg);
-            background-color: var(--color-white);
+        /* Indicador de progreso */
+        .progress-indicator {
+            background: var(--color-white);
+            padding: var(--spacing-lg);
             box-shadow: var(--shadow-sm);
             position: sticky;
-            top: 60px;
+            top: 72px;
             z-index: 999;
         }
 
-        .search-container {
+        .progress-container {
             max-width: 1200px;
             margin: 0 auto;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             position: relative;
+            margin-bottom: var(--spacing-md);
         }
 
-        .search-input {
-            width: 100%;
-            padding: var(--spacing-sm) var(--spacing-md);
-            padding-left: 40px;
-            border: 1px solid #ddd;
-            border-radius: var(--border-radius-lg);
-            font-size: 1rem;
-            transition: all var(--transition-fast);
-        }
-
-        .search-input:focus {
-            outline: none;
-            border-color: var(--color-primary);
-            box-shadow: 0 0 0 3px rgba(0, 87, 184, 0.15);
-        }
-
-        .search-icon {
+        .progress-line {
             position: absolute;
-            left: var(--spacing-md);
-            top: 50%;
-            transform: translateY(-50%);
+            top: 20px;
+            left: 0;
+            height: 3px;
+            background: var(--color-gray-200);
+            width: 100%;
+            border-radius: 2px;
+            z-index: 1;
+        }
+
+        .progress-line-active {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+            border-radius: 2px;
+            z-index: 2;
+            transition: width var(--transition-medium);
+            width: 0%;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 3;
+            background: var(--color-white);
+            padding: var(--spacing-xs);
+            border-radius: var(--border-radius);
+        }
+
+        .progress-step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--color-gray-200);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all var(--transition-medium);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .progress-step.active .progress-step-circle {
+            background: var(--color-primary);
+            color: var(--color-white);
+            transform: scale(1.1);
+            box-shadow: var(--shadow-md);
+        }
+
+        .progress-step.completed .progress-step-circle {
+            background: var(--color-success);
+            color: var(--color-white);
+        }
+
+        .progress-step-label {
+            font-size: 0.8rem;
             color: var(--text-secondary);
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .progress-step.active .progress-step-label {
+            color: var(--color-primary);
+            font-weight: 600;
         }
 
         /* Contenido principal */
@@ -177,357 +220,213 @@
             padding: var(--spacing-lg);
         }
 
-        /* Landing section */
-        .landing-section {
-            margin-bottom: var(--spacing-xxl);
-            animation: fadeIn var(--transition-slow) forwards;
-        }
-
-        .section-title {
-            font-size: 1.75rem;
-            color: var(--color-primary);
-            margin-bottom: var(--spacing-lg);
-            font-weight: 700;
-            position: relative;
-            padding-bottom: var(--spacing-sm);
-        }
-
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 60px;
-            height: 3px;
-            background-color: var(--color-secondary);
-        }
-
-        .clinic-info {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: var(--spacing-xl);
-            margin-bottom: var(--spacing-xl);
-        }
-
-        @media (max-width: 768px) {
-            .clinic-info {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .clinic-description {
-            background-color: var(--color-white);
-            padding: var(--spacing-lg);
-            border-radius: var(--border-radius-lg);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .clinic-description h3 {
-            color: var(--color-primary);
-            margin-bottom: var(--spacing-md);
-        }
-
-        .clinic-description p {
-            margin-bottom: var(--spacing-md);
-            color: var(--text-secondary);
-        }
-
-        .clinic-highlights {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: var(--spacing-md);
-            margin-top: var(--spacing-lg);
-        }
-
-        .highlight-card {
-            background-color: var(--color-white);
-            padding: var(--spacing-md);
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow-sm);
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-sm);
-        }
-
-        .highlight-icon {
-            width: 40px;
-            height: 40px;
-            background-color: rgba(0, 196, 179, 0.1);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--color-secondary);
-            font-size: 1.25rem;
-        }
-
-        .highlight-text {
-            font-size: 0.9rem;
-        }
-
-        .highlight-text strong {
-            display: block;
-            color: var(--color-primary);
-        }
-
-        /* Mapa */
-        .map-container {
-            height: 400px;
-            background-color: #eee;
-            border-radius: var(--border-radius-lg);
-            overflow: hidden;
-            box-shadow: var(--shadow-md);
-            position: relative;
-        }
-
-        .map-placeholder {
-            width: 100%;
-            height: 100%;
-            background-color: #f5f5f5;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-secondary);
-            font-size: 1.2rem;
-        }
-
-        /* Pasos del proceso */
+        /* Pasos del proceso mejorados */
         .booking-process {
-            margin-top: var(--spacing-xxl);
+            margin-bottom: var(--spacing-xxl);
         }
 
         .step-container {
             position: relative;
-            transition: none;
-            /* Quita la transición si está afectando el movimiento */
-            padding: var(--spacing-lg);
+            background: var(--color-white);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-lg);
+            padding: var(--spacing-xl);
             margin-bottom: var(--spacing-lg);
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all var(--transition-medium);
+        }
+
+        .step-container.active {
+            transform: translateY(0);
+            opacity: 1;
+            animation: slideUp var(--transition-medium) ease-out;
         }
 
         .step-container.hidden {
             display: none;
         }
 
-        .step-container.active {
-            display: block;
+        @keyframes slideUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
 
         .step-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: var(--spacing-lg);
-            padding-bottom: var(--spacing-md);
-            border-bottom: 1px solid #eee;
-        }
-
-        .step-number {
-            width: 32px;
-            height: 32px;
-            background-color: var(--color-primary);
-            color: var(--color-white);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            margin-right: var(--spacing-md);
-            flex-shrink: 0;
+            text-align: center;
+            margin-bottom: var(--spacing-xl);
         }
 
         .step-title {
-            font-size: 1.5rem;
+            font-size: 2rem;
             color: var(--color-primary);
-            font-weight: 500;
+            font-weight: 700;
+            margin-bottom: var(--spacing-sm);
         }
 
-        .step-content {
-            padding: var(--spacing-md) 0;
+        .step-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            font-weight: 400;
         }
 
-        /* Especialidades */
-        .specialties-container {
-            position: relative;
-        }
-
-        .scrollable-container {
-            display: flex;
-            overflow-x: auto;
-            padding: var(--spacing-sm) 0;
-            margin: 0 calc(-1 * var(--spacing-lg));
-            padding: var(--spacing-sm) var(--spacing-lg);
-            scroll-behavior: smooth;
-            scrollbar-width: none;
-            /* Firefox */
-            -ms-overflow-style: none;
-            /* IE/Edge */
-        }
-
-        .scrollable-container::-webkit-scrollbar {
-            display: none;
-            /* Chrome/Safari */
-        }
-
-        .scroll-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 40px;
-            height: 40px;
-            background-color: var(--color-white);
-            border: 1px solid #ddd;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 10;
-            box-shadow: var(--shadow-sm);
-            opacity: 0.9;
-            transition: all var(--transition-fast);
-        }
-
-        .scroll-btn:hover {
-            opacity: 1;
-            background-color: var(--color-primary);
-            color: var(--color-white);
-            border-color: var(--color-primary);
-        }
-
-        .scroll-btn.left {
-            left: var(--spacing-md);
-        }
-
-        .scroll-btn.right {
-            right: var(--spacing-md);
+        /* Especialidades mejoradas */
+        .specialties-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--spacing-lg);
+            margin-top: var(--spacing-xl);
         }
 
         .specialty-card {
-            min-width: 160px;
-            background-color: var(--color-white);
-            border-radius: var(--border-radius);
+            background: var(--color-white);
+            border-radius: var(--border-radius-lg);
             box-shadow: var(--shadow-sm);
-            padding: var(--spacing-md);
-            margin-right: var(--spacing-md);
+            padding: var(--spacing-xl);
             cursor: pointer;
-            transition: all var(--transition-fast);
+            transition: all var(--transition-medium);
             border: 2px solid transparent;
             text-align: center;
-            flex-shrink: 0;
+            position: relative;
+            overflow: hidden;
         }
 
-        .specialty-card:last-child {
-            margin-right: 0;
+        .specialty-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
+            transition: left var(--transition-slow);
         }
 
         .specialty-card:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-md);
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--color-primary);
+        }
+
+        .specialty-card:hover::before {
+            left: 100%;
         }
 
         .specialty-card.active {
             border-color: var(--color-primary);
-            background-color: rgba(0, 87, 184, 0.05);
+            background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+            color: var(--color-white);
+            transform: translateY(-8px) scale(1.02);
         }
 
         .specialty-icon {
-            width: 48px;
-            height: 48px;
-            background-color: rgba(0, 87, 184, 0.1);
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto var(--spacing-sm);
+            margin: 0 auto var(--spacing-lg);
+            color: var(--color-white);
+            font-size: 2rem;
+            transition: all var(--transition-medium);
+        }
+
+        .specialty-card.active .specialty-icon {
+            background: var(--color-white);
             color: var(--color-primary);
-            font-size: 1.5rem;
+            transform: scale(1.1);
         }
 
         .specialty-name {
-            font-weight: 500;
-            margin-bottom: var(--spacing-xs);
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin-bottom: var(--spacing-sm);
         }
 
         .specialty-desc {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            display: none;
+            font-size: 0.9rem;
+            opacity: 0.8;
         }
 
-        /* Doctores */
-        .doctors-container {
-            position: relative;
+        /* Doctores mejorados */
+        .doctors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--spacing-lg);
+            margin-top: var(--spacing-xl);
         }
 
         .doctor-card {
-            min-width: 240px;
-            background-color: var(--color-white);
-            border-radius: var(--border-radius);
+            background: var(--color-white);
+            border-radius: var(--border-radius-lg);
             box-shadow: var(--shadow-sm);
-            margin-right: var(--spacing-md);
             cursor: pointer;
-            transition: all var(--transition-fast);
+            transition: all var(--transition-medium);
             border: 2px solid transparent;
             overflow: hidden;
-            flex-shrink: 0;
-        }
-
-        .doctor-card:last-child {
-            margin-right: 0;
+            position: relative;
         }
 
         .doctor-card:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-md);
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--color-primary);
         }
 
         .doctor-card.active {
             border-color: var(--color-primary);
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-xl);
         }
 
         .doctor-image {
             width: 100%;
-            height: 160px;
-            background-color: #eee;
+            height: 200px;
+            background: linear-gradient(135deg, var(--color-gray-100), var(--color-gray-200));
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--text-secondary);
+            color: var(--color-gray-400);
             position: relative;
             overflow: hidden;
         }
 
-        .doctor-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
         .doctor-badge {
             position: absolute;
-            top: var(--spacing-sm);
-            right: var(--spacing-sm);
-            background-color: var(--color-secondary);
+            top: var(--spacing-md);
+            right: var(--spacing-md);
+            background: var(--color-secondary);
             color: var(--color-white);
-            padding: 2px var(--spacing-sm);
-            border-radius: var(--border-radius-sm);
-            font-size: 0.7rem;
-            font-weight: 500;
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: var(--border-radius);
+            font-size: 0.8rem;
+            font-weight: 600;
+            box-shadow: var(--shadow-sm);
         }
 
         .doctor-info {
-            padding: var(--spacing-md);
+            padding: var(--spacing-lg);
         }
 
         .doctor-name {
-            font-weight: 600;
+            font-weight: 700;
+            font-size: 1.3rem;
             margin-bottom: var(--spacing-xs);
-            font-size: 1rem;
+            color: var(--color-primary);
         }
 
         .doctor-specialty {
-            color: var(--color-primary);
-            font-size: 0.8rem;
-            margin-bottom: var(--spacing-sm);
+            color: var(--color-secondary);
+            font-size: 1rem;
+            margin-bottom: var(--spacing-md);
             font-weight: 500;
         }
 
@@ -535,235 +434,367 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: var(--spacing-sm);
+            margin-bottom: var(--spacing-md);
         }
 
         .doctor-rating {
             color: var(--color-warning);
-            font-size: 0.9rem;
+            font-size: 1rem;
             display: flex;
             align-items: center;
-            gap: 2px;
+            gap: var(--spacing-xs);
+            font-weight: 500;
         }
 
         .doctor-price {
             font-weight: 700;
+            font-size: 1.2rem;
             color: var(--color-primary);
         }
 
         .doctor-bio {
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             color: var(--text-secondary);
-            margin-bottom: var(--spacing-md);
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+            line-height: 1.5;
         }
 
-        .doctor-actions {
-            display: flex;
-            gap: var(--spacing-sm);
+        /* Calendario mejorado */
+        .calendar-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-xl);
+            margin-top: var(--spacing-xl);
         }
 
-        .btn-sm {
-            padding: var(--spacing-xs) var(--spacing-sm);
-            font-size: 0.8rem;
+        @media (max-width: 768px) {
+            .calendar-section {
+                grid-template-columns: 1fr;
+            }
         }
 
-        /* Calendario */
         .calendar-container {
-            max-width: 100%;
-            width: auto;
-            padding: var(--spacing-sm);
-            /* Añade un pequeño relleno alrededor */
+            background: var(--color-white);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-sm);
+            padding: var(--spacing-lg);
         }
 
-        .ui-datepicker {
-            font-size: 1rem;
-            /* Ajusta el tamaño del texto */
-            max-width: 100%;
-            /* Evita que el calendario sea demasiado grande */
+        .time-slots-section {
+            background: var(--color-white);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-sm);
+            padding: var(--spacing-lg);
         }
 
-
-        .ui-datepicker-header {
-            background-color: var(--color-primary);
-            color: var(--color-white);
-            border: none;
-            border-radius: var(--border-radius) var(--border-radius) 0 0;
-        }
-
-        .ui-datepicker-title {
-            font-weight: 500;
-        }
-
-        .ui-datepicker-calendar th {
+        .section-label {
+            font-size: 1.2rem;
+            font-weight: 600;
             color: var(--color-primary);
-            font-weight: 500;
-            padding: var(--spacing-sm) 0;
-        }
-
-        .ui-datepicker-calendar td {
-            padding: 2px;
-        }
-
-        .ui-datepicker-calendar td a {
-            text-align: center;
-            border: 1px solid transparent;
-            border-radius: 50%;
-            padding: 5px;
-            display: block;
-            transition: all var(--transition-fast);
-        }
-
-        .ui-datepicker-calendar td a.ui-state-active {
-            background-color: var(--color-primary);
-            color: var(--color-white);
-        }
-
-        .ui-datepicker-calendar td a.ui-state-highlight {
-            border-color: var(--color-primary);
-        }
-
-        /* Horarios */
-        .time-slots-container {
-            margin-top: var(--spacing-lg);
-        }
-
-        .time-slots-title {
-            font-size: 1.1rem;
             margin-bottom: var(--spacing-md);
-            color: var(--color-primary);
-            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
         }
 
         .time-slots {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
             gap: var(--spacing-sm);
-            margin-bottom: var(--spacing-lg);
         }
 
         .time-slot {
-            padding: var(--spacing-sm);
-            background-color: var(--color-white);
-            border: 1px solid #ddd;
+            padding: var(--spacing-md);
+            background: var(--color-gray-100);
+            border: 2px solid transparent;
             border-radius: var(--border-radius);
             text-align: center;
             cursor: pointer;
             transition: all var(--transition-fast);
-            font-size: 0.9rem;
+            font-weight: 500;
+            font-size: 0.95rem;
         }
 
         .time-slot:hover {
             border-color: var(--color-primary);
+            background: var(--color-primary);
+            color: var(--color-white);
+            transform: translateY(-2px);
         }
 
         .time-slot.selected {
-            background-color: var(--color-primary);
+            background: var(--color-primary);
             color: var(--color-white);
             border-color: var(--color-primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
         }
 
         .time-slot.unavailable {
-            background-color: #f5f5f5;
-            color: var(--text-secondary);
+            background: var(--color-gray-200);
+            color: var(--color-gray-400);
             cursor: not-allowed;
             text-decoration: line-through;
         }
 
-        /* Selector de urgencia */
-        .urgency-selector-container {
+        /* Tipo de consulta */
+        .consultation-type {
             margin-top: var(--spacing-xl);
             padding-top: var(--spacing-lg);
-            border-top: 1px solid #eee;
+            border-top: 1px solid var(--color-gray-200);
         }
 
-        .urgency-label {
-            display: block;
+        .consultation-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-md);
+        }
+
+        .consultation-option {
+            background: var(--color-white);
+            border: 2px solid var(--color-gray-200);
+            border-radius: var(--border-radius-lg);
+            padding: var(--spacing-lg);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            text-align: center;
+        }
+
+        .consultation-option:hover {
+            border-color: var(--color-primary);
+            transform: translateY(-2px);
+        }
+
+        .consultation-option.active {
+            border-color: var(--color-primary);
+            background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+            color: var(--color-white);
+            transform: translateY(-2px);
+        }
+
+        /* Pasarela de pago */
+        .payment-section {
+            background: var(--color-white);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-lg);
+            padding: var(--spacing-xl);
+            margin-top: var(--spacing-xl);
+        }
+
+        .payment-header {
+            text-align: center;
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .payment-title {
+            font-size: 1.8rem;
+            color: var(--color-primary);
+            font-weight: 700;
             margin-bottom: var(--spacing-sm);
-            font-weight: 500;
+        }
+
+        .payment-amount {
+            font-size: 2.5rem;
+            color: var(--color-success);
+            font-weight: 800;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .payment-note {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--spacing-md);
+            margin: var(--spacing-xl) 0;
+        }
+
+        .payment-method {
+            background: var(--color-gray-50);
+            border: 2px solid var(--color-gray-200);
+            border-radius: var(--border-radius-lg);
+            padding: var(--spacing-lg);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            text-align: center;
+        }
+
+        .payment-method:hover {
+            border-color: var(--color-primary);
+            transform: translateY(-2px);
+        }
+
+        .payment-method.active {
+            border-color: var(--color-primary);
+            background: var(--color-primary);
+            color: var(--color-white);
+        }
+
+        .payment-method-icon {
+            font-size: 2rem;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .payment-form {
+            display: none;
+            animation: fadeIn var(--transition-medium);
+        }
+
+        .payment-form.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: var(--spacing-sm);
             color: var(--color-primary);
         }
 
-        .urgency-selector {
+        .form-input {
             width: 100%;
-            padding: var(--spacing-sm) var(--spacing-md);
+            padding: var(--spacing-md);
+            border: 2px solid var(--color-gray-200);
             border-radius: var(--border-radius);
-            border: 1px solid #ddd;
-            font-family: inherit;
             font-size: 1rem;
             transition: all var(--transition-fast);
-            background-color: var(--color-white);
         }
 
-        .urgency-selector:focus {
+        .form-input:focus {
             outline: none;
             border-color: var(--color-primary);
-            box-shadow: 0 0 0 3px rgba(0, 87, 184, 0.15);
+            box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
         }
 
-        /* Acciones */
-        .actions-container {
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-md);
+        }
+
+        /* Barra de navegación inferior móvil */
+        .mobile-bottom-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--color-white);
+            border-top: 1px solid var(--color-gray-200);
+            padding: var(--spacing-sm) var(--spacing-md);
+            z-index: 1000;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .mobile-bottom-nav {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+        }
+
+        .nav-button {
+            background: var(--color-primary);
+            color: var(--color-white);
+            border: none;
+            border-radius: var(--border-radius);
+            padding: var(--spacing-md) var(--spacing-lg);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-fast);
             display: flex;
-            justify-content: space-between;
-            margin-top: var(--spacing-xl);
-            padding-top: var(--spacing-lg);
-            border-top: 1px solid #eee;
+            align-items: center;
+            gap: var(--spacing-sm);
         }
 
+        .nav-button:disabled {
+            background: var(--color-gray-300);
+            cursor: not-allowed;
+        }
+
+        .nav-button.secondary {
+            background: var(--color-gray-200);
+            color: var(--text-primary);
+        }
+
+        /* Botones principales mejorados */
         .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: var(--spacing-md) var(--spacing-lg);
-            border-radius: var(--border-radius);
+            padding: var(--spacing-md) var(--spacing-xl);
+            border-radius: var(--border-radius-lg);
             border: none;
-            font-weight: 500;
-            font-size: 1rem;
+            font-weight: 600;
+            font-size: 1.1rem;
             cursor: pointer;
             transition: all var(--transition-fast);
             text-align: center;
             gap: var(--spacing-sm);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left var(--transition-medium);
+        }
+
+        .btn:hover::before {
+            left: 100%;
         }
 
         .btn-primary {
-            background-color: var(--color-primary);
+            background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
             color: var(--color-white);
+            box-shadow: var(--shadow-md);
         }
 
         .btn-primary:hover {
-            background-color: var(--color-primary-dark);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-sm);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-xl);
         }
 
         .btn-primary:disabled {
-            background-color: #ccc;
+            background: var(--color-gray-300);
             cursor: not-allowed;
             transform: none;
             box-shadow: none;
         }
 
-        .btn-outline {
-            background-color: transparent;
-            border: 1px solid var(--color-primary);
-            color: var(--color-primary);
+        .btn-success {
+            background: linear-gradient(135deg, var(--color-success), #00E676);
+            color: var(--color-white);
+            box-shadow: var(--shadow-md);
         }
 
-        .btn-outline:hover {
-            background-color: rgba(0, 87, 184, 0.1);
+        .btn-success:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-xl);
         }
 
-        /* Modal de confirmación */
+        /* Modal mejorado */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.6);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -772,6 +803,7 @@
             pointer-events: none;
             transition: opacity var(--transition-medium);
             padding: var(--spacing-lg);
+            backdrop-filter: blur(10px);
         }
 
         .modal-overlay.active {
@@ -780,81 +812,111 @@
         }
 
         .modal-content {
-            background-color: var(--color-white);
-            border-radius: var(--border-radius-lg);
-            padding: var(--spacing-xl);
-            max-width: 500px;
+            background: var(--color-white);
+            border-radius: var(--border-radius-xl);
+            padding: var(--spacing-xxl);
+            max-width: 600px;
             width: 100%;
             box-shadow: var(--shadow-xl);
-            transform: translateY(20px);
+            transform: translateY(30px) scale(0.9);
             transition: transform var(--transition-medium);
             position: relative;
         }
 
         .modal-overlay.active .modal-content {
-            transform: translateY(0);
+            transform: translateY(0) scale(1);
         }
 
         .modal-close {
             position: absolute;
-            top: var(--spacing-md);
-            right: var(--spacing-md);
-            background: none;
+            top: var(--spacing-lg);
+            right: var(--spacing-lg);
+            background: var(--color-gray-100);
             border: none;
-            font-size: 1.5rem;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
             color: var(--text-secondary);
             cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .modal-close:hover {
+            background: var(--color-error);
+            color: var(--color-white);
         }
 
         .modal-icon {
-            width: 60px;
-            height: 60px;
-            background-color: rgba(76, 175, 80, 0.1);
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--color-success), #00E676);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--color-success);
-            font-size: 2rem;
-            margin: 0 auto var(--spacing-lg);
+            color: var(--color-white);
+            font-size: 2.5rem;
+            margin: 0 auto var(--spacing-xl);
+            animation: bounceIn 0.6s ease-out;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
         }
 
         .modal-title {
             text-align: center;
-            font-size: 1.5rem;
+            font-size: 2rem;
             color: var(--color-success);
-            margin-bottom: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
             font-weight: 700;
         }
 
         .modal-message {
             text-align: center;
-            margin-bottom: var(--spacing-lg);
+            margin-bottom: var(--spacing-xl);
             line-height: 1.6;
+            font-size: 1.1rem;
         }
 
         .modal-actions {
             display: flex;
             justify-content: center;
-            margin-top: var(--spacing-xl);
+            gap: var(--spacing-md);
         }
 
-        /* Animaciones */
+        /* Animaciones adicionales */
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .fade-in {
-            animation: fadeIn var(--transition-slow) forwards;
+            animation: fadeIn var(--transition-medium) ease-out;
         }
 
-        /* Responsive */
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--color-white);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive mejoras */
         @media (max-width: 768px) {
             .main-container {
                 padding: var(--spacing-md);
@@ -864,34 +926,56 @@
                 padding: var(--spacing-lg);
             }
 
-            .time-slots {
-                grid-template-columns: repeat(3, 1fr);
-            }
-
-            .actions-container {
-                flex-direction: column-reverse;
-                gap: var(--spacing-md);
-            }
-        }
-
-        @media (max-width: 480px) {
-            .time-slots {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .section-title {
+            .step-title {
                 font-size: 1.5rem;
             }
 
-            .step-title {
-                font-size: 1.25rem;
+            .specialties-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: var(--spacing-md);
             }
+
+            .doctors-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .consultation-options {
+                grid-template-columns: 1fr;
+            }
+
+            .payment-methods {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Estados de carga y feedback */
+        .processing {
+            position: relative;
+            pointer-events: none;
+        }
+
+        .processing::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: inherit;
         }
     </style>
 </head>
 
 <body>
-    <!-- Header premium -->
+    <!-- Header -->
     <header class="app-header">
         <div class="header-container">
             <div class="logo">
@@ -906,244 +990,219 @@
         </div>
     </header>
 
-    <!-- Barra de búsqueda -->
-    <div class="search-bar">
-        <div class="search-container">
-            <i class="fas fa-search search-icon"></i>
-            <input type="text" class="search-input" placeholder="Buscar especialistas, clínicas o servicios...">
+    <!-- Indicador de progreso -->
+    <div class="progress-indicator">
+        <div class="progress-container">
+            <div class="progress-steps">
+                <div class="progress-line"></div>
+                <div class="progress-line-active" id="progress-line"></div>
+                
+                <div class="progress-step active" id="progress-1">
+                    <div class="progress-step-circle">1</div>
+                    <div class="progress-step-label">Especialidad</div>
+                </div>
+                
+                <div class="progress-step" id="progress-2">
+                    <div class="progress-step-circle">2</div>
+                    <div class="progress-step-label">Médico</div>
+                </div>
+                
+                <div class="progress-step" id="progress-3">
+                    <div class="progress-step-circle">3</div>
+                    <div class="progress-step-label">Horario</div>
+                </div>
+                
+                <div class="progress-step" id="progress-4">
+                    <div class="progress-step-circle">4</div>
+                    <div class="progress-step-label">Pago</div>
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- Contenido principal -->
     <div class="main-container">
-        <!-- Sección de información de la clínica -->
-
-
-        <!-- Proceso de reserva -->
         <section class="booking-process">
-            <h2 class="section-title">Reserva tu cita médica</h2>
-
-            <!-- Paso 1: Selección de especialidad -->
+            <!-- Paso 1: Especialidades -->
             <div class="step-container active" id="step-specialty">
                 <div class="step-header">
-                    <div class="step-number">1</div>
-                    <h3 class="step-title">Selecciona una especialidad</h3>
+                    <h2 class="step-title">¿Qué tipo de consulta necesitas?</h2>
+                    <p class="step-subtitle">Selecciona la especialidad médica que mejor se adapte a tus necesidades</p>
                 </div>
 
-                <div class="step-content">
-                    <p>Elige el tipo de consulta que necesitas de nuestra amplia gama de especialidades médicas.</p>
-
-                    <div class="specialties-container">
-                        <button class="scroll-btn left" onclick="scrollSpecialties(-1)"><i
-                                class="fas fa-chevron-left"></i></button>
-                        <button class="scroll-btn right" onclick="scrollSpecialties(1)"><i
-                                class="fas fa-chevron-right"></i></button>
-
-                        <div class="scrollable-container" id="specialties-scroll">
-                            <div class="specialty-card" data-specialty="general">
-                                <div class="specialty-icon">
-                                    <i class="fas fa-user-md"></i>
-                                </div>
-                                <h4 class="specialty-name">Consulta General</h4>
-                                <p class="specialty-desc">Atención primaria y chequeos médicos</p>
-                            </div>
-                            <div class="specialty-card" data-specialty="dermatologia">
-                                <div class="specialty-icon">
-                                    <i class="fas fa-allergies"></i>
-                                </div>
-                                <h4 class="specialty-name">Dermatología</h4>
-                                <p class="specialty-desc">Cuidado de la piel y tratamientos</p>
-                            </div>
-                            <div class="specialty-card" data-specialty="cardiologia">
-                                <div class="specialty-icon">
-                                    <i class="fas fa-heartbeat"></i>
-                                </div>
-                                <h4 class="specialty-name">Cardiología</h4>
-                                <p class="specialty-desc">Salud cardiovascular</p>
-                            </div>
-                            <div class="specialty-card" data-specialty="pediatria">
-                                <div class="specialty-icon">
-                                    <i class="fas fa-baby"></i>
-                                </div>
-                                <h4 class="specialty-name">Pediatría</h4>
-                                <p class="specialty-desc">Atención infantil</p>
-                            </div>
-                            <div class="specialty-card" data-specialty="ginecologia">
-                                <div class="specialty-icon">
-                                    <i class="fas fa-female"></i>
-                                </div>
-                                <h4 class="specialty-name">Ginecología</h4>
-                                <p class="specialty-desc">Salud femenina</p>
-                            </div>
-                            <div class="specialty-card" data-specialty="odontologia">
-                                <div class="specialty-icon">
-                                    <i class="fas fa-tooth"></i>
-                                </div>
-                                <h4 class="specialty-name">Odontología</h4>
-                                <p class="specialty-desc">Salud bucodental</p>
-                            </div>
-                            <div class="specialty-card" data-specialty="oftalmologia">
-                                <div class="specialty-icon">
-                                    <i class="fas fa-eye"></i>
-                                </div>
-                                <h4 class="specialty-name">Oftalmología</h4>
-                                <p class="specialty-desc">Cuidado visual</p>
-                            </div>
-                            <div class="specialty-card" data-specialty="traumatologia">
-                                <div class="specialty-icon">
-                                    <i class="fas fa-bone"></i>
-                                </div>
-                                <h4 class="specialty-name">Traumatología</h4>
-                                <p class="specialty-desc">Lesiones óseas</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="actions-container">
-                        <button class="btn btn-primary" id="btn-next-specialty" disabled>Siguiente <i
-                                class="fas fa-arrow-right"></i></button>
-                    </div>
+                <div class="specialties-grid" id="specialties-grid">
+                    <!-- Se llenan dinámicamente -->
                 </div>
             </div>
 
-            <!-- Paso 2: Selección de doctor -->
+            <!-- Paso 2: Doctores -->
             <div class="step-container hidden" id="step-doctor">
                 <div class="step-header">
-                    <div class="step-number">2</div>
-                    <h3 class="step-title">Elige tu médico</h3>
+                    <h2 class="step-title">Elige tu médico especialista</h2>
+                    <p class="step-subtitle">Profesionales altamente calificados y con excelentes reseñas</p>
                 </div>
 
-                <div class="step-content">
-                    <p>Selecciona al profesional de tu preferencia según su especialidad, disponibilidad y
-                        calificaciones.</p>
-
-                    <div class="doctors-container">
-                        <button class="scroll-btn left" onclick="scrollDoctors(-1)"><i
-                                class="fas fa-chevron-left"></i></button>
-                        <button class="scroll-btn right" onclick="scrollDoctors(1)"><i
-                                class="fas fa-chevron-right"></i></button>
-
-                        <div class="scrollable-container" id="doctors-scroll">
-                            <!-- Doctores se cargarán dinámicamente -->
-                        </div>
-                    </div>
-
-                    <div class="doctor-details" id="doctor-details">
-                        <h4 id="doctor-selected-name"></h4>
-                        <p class="doctor-specialty" id="doctor-selected-specialty"></p>
-                        <div class="doctor-meta">
-                            <div class="doctor-rating" id="doctor-selected-rating"></div>
-                            <div class="doctor-price" id="doctor-selected-price"></div>
-                        </div>
-                        <p class="doctor-bio" id="doctor-selected-bio"></p>
-                    </div>
-
-                    <div class="actions-container">
-                        <button class="btn btn-outline" id="btn-back-doctor"><i class="fas fa-arrow-left"></i>
-                            Atrás</button>
-                        <button class="btn btn-primary" id="btn-next-doctor" disabled>Siguiente <i
-                                class="fas fa-arrow-right"></i></button>
-                    </div>
+                <div class="doctors-grid" id="doctors-grid">
+                    <!-- Se llenan dinámicamente -->
                 </div>
             </div>
 
-            <!-- Paso 3: Selección de fecha y hora -->
+            <!-- Paso 3: Horarios -->
             <div class="step-container hidden" id="step-schedule">
                 <div class="step-header">
-                    <div class="step-number">3</div>
-                    <h3 class="step-title">Fecha y hora de consulta</h3>
+                    <h2 class="step-title">Selecciona fecha y hora</h2>
+                    <p class="step-subtitle">Encuentra el horario perfecto para tu consulta médica</p>
                 </div>
 
-                <div class="step-content">
-                    <p>Elige un día y horario disponible para tu consulta médica.</p>
-
+                <div class="calendar-section">
                     <div class="calendar-container">
-                        <input type="text" id="datepicker" placeholder="Selecciona una fecha" readonly>
+                        <h3 class="section-label">
+                            <i class="fas fa-calendar-alt"></i>
+                            Calendario
+                        </h3>
+                        <input type="text" id="datepicker" placeholder="Haz clic para seleccionar fecha" readonly>
                     </div>
 
-                    <div class="time-slots-container">
-                        <h4 class="time-slots-title">Horarios disponibles</h4>
+                    <div class="time-slots-section">
+                        <h3 class="section-label">
+                            <i class="fas fa-clock"></i>
+                            Horarios disponibles
+                        </h3>
                         <div class="time-slots" id="time-slots">
-                            <!-- Horarios se cargarán dinámicamente -->
+                            <!-- Se llenan dinámicamente -->
                         </div>
                     </div>
+                </div>
 
-                    <div class="urgency-selector-container">
-                        <label for="urgency" class="urgency-label">Tipo de consulta</label>
-                        <select id="urgency" class="urgency-selector">
-                            <option value="no">Consulta normal ($50)</option>
-                            <option value="yes">Consulta urgente (+$20)</option>
-                        </select>
-                    </div>
-
-                    <div class="actions-container">
-                        <button class="btn btn-outline" id="btn-back-schedule"><i class="fas fa-arrow-left"></i>
-                            Atrás</button>
-                        <button class="btn btn-primary" id="btn-confirm-appointment" disabled><i
-                                class="fas fa-calendar-check"></i> Confirmar Cita</button>
+                <div class="consultation-type">
+                    <h3 class="section-label">
+                        <i class="fas fa-stethoscope"></i>
+                        Tipo de consulta
+                    </h3>
+                    <div class="consultation-options">
+                        <div class="consultation-option active" data-type="normal">
+                            <i class="fas fa-user-md" style="font-size: 2rem; margin-bottom: 8px; color: var(--color-primary);"></i>
+                            <h4>Consulta Normal</h4>
+                            <p>$50</p>
+                        </div>
+                        <div class="consultation-option" data-type="urgent">
+                            <i class="fas fa-ambulance" style="font-size: 2rem; margin-bottom: 8px; color: var(--color-accent);"></i>
+                            <h4>Consulta Urgente</h4>
+                            <p>$70 (+$20)</p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </section>
-        <section class="landing-section">
-            <h2 class="section-title">Clínica Médica SaludPlus</h2>
 
-            <div class="clinic-info">
-                <div class="clinic-description">
-                    <h3>Excelencia en atención médica</h3>
-                    <p>En SaludPlus nos dedicamos a brindar atención médica de calidad con los más altos estándares
-                        profesionales. Nuestro equipo de especialistas está comprometido con tu bienestar y salud
-                        integral.</p>
-                    <p>Contamos con tecnología de última generación y un enfoque humano que nos distingue en el sector
-                        salud.</p>
-
-                    <div class="clinic-highlights">
-                        <div class="highlight-card">
-                            <div class="highlight-icon">
-                                <i class="fas fa-clock"></i>
-                            </div>
-                            <div class="highlight-text">
-                                <strong>Horario extendido</strong>
-                                Lun-Vie 8am - 8pm
-                            </div>
-                        </div>
-                        <div class="highlight-card">
-                            <div class="highlight-icon">
-                                <i class="fas fa-ambulance"></i>
-                            </div>
-                            <div class="highlight-text">
-                                <strong>Emergencias</strong>
-                                24/7
-                            </div>
-                        </div>
-                        <div class="highlight-card">
-                            <div class="highlight-icon">
-                                <i class="fas fa-parking"></i>
-                            </div>
-                            <div class="highlight-text">
-                                <strong>Estacionamiento</strong>
-                                Gratuito
-                            </div>
-                        </div>
-                        <div class="highlight-card">
-                            <div class="highlight-icon">
-                                <i class="fas fa-wifi"></i>
-                            </div>
-                            <div class="highlight-text">
-                                <strong>WiFi</strong>
-                                Gratis para pacientes
-                            </div>
-                        </div>
-                    </div>
+            <!-- Paso 4: Pago -->
+            <div class="step-container hidden" id="step-payment">
+                <div class="step-header">
+                    <h2 class="step-title">Confirma y paga tu cita</h2>
+                    <p class="step-subtitle">Paga el 50% ahora y el resto en consulta</p>
                 </div>
 
-                <div class="map-container">
-                    <div class="map-placeholder">
-                        <i class="fas fa-map-marker-alt"></i> Mapa de ubicación (Google Maps)
+                <!-- Resumen de la cita -->
+                <div class="appointment-summary" id="appointment-summary">
+                    <!-- Se llena dinámicamente -->
+                </div>
+
+                <!-- Sección de pago -->
+                <div class="payment-section">
+                    <div class="payment-header">
+                        <h3 class="payment-title">Total a pagar ahora:</h3>
+                        <div class="payment-amount" id="payment-amount">$25</div>
+                        <p class="payment-note">Paga el 50% para confirmar tu reserva</p>
                     </div>
+
+                    <div class="payment-methods">
+                        <div class="payment-method active" data-method="card">
+                            <div class="payment-method-icon">
+                                <i class="fas fa-credit-card"></i>
+                            </div>
+                            <h4>Tarjeta de Crédito/Débito</h4>
+                        </div>
+                        <div class="payment-method" data-method="paypal">
+                            <div class="payment-method-icon">
+                                <i class="fab fa-paypal"></i>
+                            </div>
+                            <h4>PayPal</h4>
+                        </div>
+                        <div class="payment-method" data-method="transfer">
+                            <div class="payment-method-icon">
+                                <i class="fas fa-university"></i>
+                            </div>
+                            <h4>Transferencia</h4>
+                        </div>
+                    </div>
+
+                    <!-- Formulario de tarjeta -->
+                    <div class="payment-form active" id="card-form">
+                        <div class="form-group">
+                            <label class="form-label">Número de tarjeta</label>
+                            <input type="text" class="form-input" placeholder="1234 5678 9012 3456" maxlength="19">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Vencimiento</label>
+                                <input type="text" class="form-input" placeholder="MM/AA" maxlength="5">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">CVV</label>
+                                <input type="text" class="form-input" placeholder="123" maxlength="4">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Nombre del titular</label>
+                            <input type="text" class="form-input" placeholder="Como aparece en la tarjeta">
+                        </div>
+                    </div>
+
+                    <!-- Formulario de PayPal -->
+                    <div class="payment-form" id="paypal-form">
+                        <div class="form-group">
+                            <label class="form-label">Email de PayPal</label>
+                            <input type="email" class="form-input" placeholder="tu@email.com">
+                        </div>
+                    </div>
+
+                    <!-- Formulario de transferencia -->
+                    <div class="payment-form" id="transfer-form">
+                        <div class="form-group">
+                            <label class="form-label">Banco</label>
+                            <select class="form-input">
+                                <option>Selecciona tu banco</option>
+                                <option>Banco de la Nación</option>
+                                <option>BCP</option>
+                                <option>BBVA</option>
+                                <option>Interbank</option>
+                                <option>Scotiabank</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Número de cuenta</label>
+                            <input type="text" class="form-input" placeholder="Ingresa tu número de cuenta">
+                        </div>
+                    </div>
+
+                    <button class="btn btn-success" id="btn-pay" style="width: 100%; margin-top: 2rem;">
+                        <i class="fas fa-lock"></i>
+                        Pagar y Confirmar Cita
+                    </button>
                 </div>
             </div>
         </section>
+    </div>
+
+    <!-- Barra de navegación inferior móvil -->
+    <div class="mobile-bottom-nav">
+        <button class="nav-button secondary" id="mobile-back" style="display: none;">
+            <i class="fas fa-arrow-left"></i>
+            Atrás
+        </button>
+        <button class="nav-button" id="mobile-next" disabled>
+            Siguiente
+            <i class="fas fa-arrow-right"></i>
+        </button>
     </div>
 
     <!-- Modal de confirmación -->
@@ -1155,10 +1214,13 @@
             </div>
             <h3 class="modal-title">¡Cita confirmada!</h3>
             <div class="modal-message" id="confirmation-message">
-                <!-- Mensaje de confirmación se cargará dinámicamente -->
+                <!-- Se llena dinámicamente -->
             </div>
             <div class="modal-actions">
-                <button class="btn btn-primary" id="btn-finish-booking"><i class="fas fa-check"></i> Aceptar</button>
+                <button class="btn btn-success" onclick="resetFlow()">
+                    <i class="fas fa-home"></i>
+                    Volver al inicio
+                </button>
             </div>
         </div>
     </div>
@@ -1168,417 +1230,518 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script>
         $(document).ready(function () {
-            // Datos de ejemplo mejorados
+            // Datos mejorados
             const specialties = [
                 {
                     id: "general",
-                    name: "Consulta General",
+                    name: "Medicina General",
                     icon: "user-md",
                     description: "Atención primaria y chequeos médicos generales",
                     doctors: [
                         {
                             id: "doc-1",
-                            name: "Dr. Juan Pérez",
+                            name: "Dr. Juan Pérez González",
                             specialty: "Medicina General",
-                            rating: 4.2,
-                            price: "$50",
-                            bio: "Especialista con 10 años de experiencia en atención primaria. Graduado de la Universidad Nacional con maestría en Medicina Familiar.",
-                            image: "doctor1.jpg",
-                            // Disponibilidad ahora viene del backend
+                            rating: 4.9,
+                            price: 50,
+                            bio: "Especialista con más de 15 años de experiencia en atención primaria. Graduado con honores de la Universidad Nacional Mayor de San Marcos.",
                             badge: "Disponible hoy"
                         },
                         {
                             id: "doc-2",
-                            name: "Dra. María Gómez",
+                            name: "Dra. María Elena Gómez",
                             specialty: "Medicina Familiar",
-                            rating: 4.7,
-                            price: "$55",
-                            bio: "Especializada en atención integral a familias. Experiencia en pediatría y geriatría. Certificada en medicina preventiva.",
-                            image: "doctor2.jpg",
-                            badge: "Nuevo"
-                        }
-                    ]
-                },
-                {
-                    id: "dermatologia",
-                    name: "Consulta General",
-                    icon: "user-md",
-                    description: "Atención primaria y chequeos médicos generales",
-                    doctors: [
-                        {
-                            id: "doc-1",
-                            name: "Dr. Juan Pérez",
-                            specialty: "Medicina General",
-                            rating: 4.2,
-                            price: "$50",
-                            bio: "Especialista con 10 años de experiencia en atención primaria. Graduado de la Universidad Nacional con maestría en Medicina Familiar.",
-                            image: "doctor1.jpg",
-                            // Disponibilidad ahora viene del backend
-                            badge: "Disponible hoy"
-                        },
-                        {
-                            id: "doc-2",
-                            name: "Dra. María Gómez",
-                            specialty: "Medicina Familiar",
-                            rating: 4.7,
-                            price: "$55",
-                            bio: "Especializada en atención integral a familias. Experiencia en pediatría y geriatría. Certificada en medicina preventiva.",
-                            image: "doctor2.jpg",
-                            badge: "Nuevo"
+                            rating: 4.8,
+                            price: 55,
+                            bio: "Especializada en atención integral familiar. Certificada en medicina preventiva y cuidados paliativos.",
+                            badge: "⭐ Popular"
                         }
                     ]
                 },
                 {
                     id: "cardiologia",
-                    name: "Consulta General",
-                    icon: "user-md",
-                    description: "Atención primaria y chequeos médicos generales",
+                    name: "Cardiología",
+                    icon: "heartbeat",
+                    description: "Especialistas en salud cardiovascular y prevención",
                     doctors: [
                         {
-                            id: "doc-1",
-                            name: "Dr. Juan Pérez",
-                            specialty: "Medicina General",
-                            rating: 4.2,
-                            price: "$50",
-                            bio: "Especialista con 10 años de experiencia en atención primaria. Graduado de la Universidad Nacional con maestría en Medicina Familiar.",
-                            image: "./images/doc1.png",
-                            // Disponibilidad ahora viene del backend
-                            badge: "Disponible hoy"
-                        },
-                        {
-                            id: "doc-2",
-                            name: "Dra. María Gómez",
-                            specialty: "Medicina Familiar",
+                            id: "doc-3",
+                            name: "Dr. Carlos Mendoza",
+                            specialty: "Cardiología Clínica",
                             rating: 4.7,
-                            price: "$55",
-                            bio: "Especializada en atención integral a familias. Experiencia en pediatría y geriatría. Certificada en medicina preventiva.",
-                            image: "./images/doc1.png",
-                            badge: "Nuevo"
+                            price: 80,
+                            bio: "Cardiólogo intervencionista con experiencia en procedimientos mínimamente invasivos.",
+                            badge: "Especialista"
+                        }
+                    ]
+                },
+                {
+                    id: "dermatologia",
+                    name: "Dermatología",
+                    icon: "allergies",
+                    description: "Cuidado especializado de la piel y tratamientos estéticos",
+                    doctors: [
+                        {
+                            id: "doc-4",
+                            name: "Dra. Ana Sofía Ruiz",
+                            specialty: "Dermatología Cosmética",
+                            rating: 4.9,
+                            price: 70,
+                            bio: "Especialista en dermatología estética y tratamientos anti-aging con tecnología láser.",
+                            badge: "🔥 Trending"
                         }
                     ]
                 },
                 {
                     id: "pediatria",
-                    name: "Consulta General",
-                    icon: "user-md",
-                    description: "Atención primaria y chequeos médicos generales",
+                    name: "Pediatría",
+                    icon: "baby",
+                    description: "Atención médica especializada para niños y adolescentes",
                     doctors: [
                         {
-                            id: "doc-1",
-                            name: "Dr. Juan Pérez",
-                            specialty: "Medicina General",
-                            rating: 4.2,
-                            price: "$50",
-                            bio: "Especialista con 10 años de experiencia en atención primaria. Graduado de la Universidad Nacional con maestría en Medicina Familiar.",
-                            image: "doctor1.jpg",
-                            // Disponibilidad ahora viene del backend
-                            badge: "Disponible hoy"
-                        },
-                        {
-                            id: "doc-2",
-                            name: "Dra. María Gómez",
-                            specialty: "Medicina Familiar",
-                            rating: 4.7,
-                            price: "$55",
-                            bio: "Especializada en atención integral a familias. Experiencia en pediatría y geriatría. Certificada en medicina preventiva.",
-                            image: "./images/doc1.png",
-                            badge: "Nuevo"
+                            id: "doc-5",
+                            name: "Dr. Roberto Silva",
+                            specialty: "Pediatría General",
+                            rating: 4.8,
+                            price: 60,
+                            bio: "Pediatra con enfoque en desarrollo infantil y medicina preventiva pediátrica.",
+                            badge: "Recomendado"
                         }
                     ]
                 },
-                // ... (otras especialidades permanecen igual)
+                {
+                    id: "ginecologia",
+                    name: "Ginecología",
+                    icon: "female",
+                    description: "Salud integral de la mujer en todas las etapas",
+                    doctors: [
+                        {
+                            id: "doc-6",
+                            name: "Dra. Patricia Morales",
+                            specialty: "Ginecología y Obstetricia",
+                            rating: 4.9,
+                            price: 75,
+                            bio: "Especialista en salud reproductiva femenina y embarazos de alto riesgo.",
+                            badge: "Experta"
+                        }
+                    ]
+                },
+                {
+                    id: "oftalmologia",
+                    name: "Oftalmología",
+                    icon: "eye",
+                    description: "Cuidado completo de la salud visual",
+                    doctors: [
+                        {
+                            id: "doc-7",
+                            name: "Dr. Miguel Torres",
+                            specialty: "Oftalmología",
+                            rating: 4.7,
+                            price: 65,
+                            bio: "Especialista en cirugía refractiva y tratamiento de cataratas con técnicas avanzadas.",
+                            badge: "Cirujano"
+                        }
+                    ]
+                }
             ];
-            const backendAvailability = {
+
+            // Disponibilidad simulada
+            const doctorAvailability = {
                 "doc-1": {
-                    unavailableDates: ["2023-07-15", "2023-07-19"], // Fechas completamente ocupadas
+                    unavailableDates: ["2024-12-25", "2024-12-31"],
                     unavailableSlots: {
-                        "2023-07-16": ["10:00", "14:00"], // Horarios ocupados para fechas específicas
-                        "2023-07-20": ["09:00", "11:00"]
+                        "2024-12-20": ["10:00", "14:00"],
+                        "2024-12-21": ["09:00", "11:00"]
                     }
-                },
-                "doc-2": {
-                    unavailableDates: ["2023-07-18"],
-                    unavailableSlots: {
-                        "2023-07-17": ["08:00", "13:00"],
-                        "2023-07-20": ["14:00"]
-                    }
-                },
-                // ... otros doctores
+                }
             };
+
             // Variables de estado
-            let currentStep = "step-specialty";
+            let currentStep = 1;
             let selectedSpecialty = null;
             let selectedDoctor = null;
             let selectedDate = null;
             let selectedTime = null;
-            let isUrgent = false;
+            let consultationType = 'normal';
+            let paymentMethod = 'card';
 
-            // Inicializar datepicker
-            $("#datepicker").datepicker({
-                dateFormat: "yy-mm-dd",
-                minDate: 0,  // No permitir fechas pasadas
-                beforeShowDay: function (date) {
-                    const dateString = $.datepicker.formatDate("yy-mm-dd", date);
-                    const day = date.getDay();
+            // Inicializar aplicación
+            initializeApp();
 
-                    // Deshabilitar fines de semana
-                    if (day === 0 || day === 6) {
-                        return [false, "", "Fin de semana"];
-                    }
-
-                    // Verificar disponibilidad con el backend
-                    if (selectedDoctor) {
-                        const doctorUnavailable = backendAvailability[selectedDoctor.id];
-
-                        // Si la fecha está completamente ocupada
-                        if (doctorUnavailable.unavailableDates.includes(dateString)) {
-                            return [false, "unavailable", "No disponible"];
-                        }
-
-                        // Si la fecha tiene horarios disponibles
-                        return [true, "available", "Disponible"];
-                    }
-
-                    return [true, "", "Disponible"];
-                },
-                onSelect: function (dateText) {
-                    selectedDate = dateText;
-                    updateTimeSlots(); // Actualizar los horarios disponibles
-                    checkScheduleCompletion(); // Comprobar si se puede continuar al siguiente paso
-                }
-            });
-            // Paso 1: Selección de especialidad
-            $(".specialty-card").click(function () {
-                $(".specialty-card").removeClass("active");
-                $(this).addClass("active");
-
-                const specialtyId = $(this).data("specialty");
-                selectedSpecialty = specialties.find(s => s.id === specialtyId);
-
-                $("#btn-next-specialty").prop("disabled", false);
-
-                // Mostrar descripción en dispositivos grandes
-                if (window.innerWidth > 768) {
-                    $(this).find(".specialty-desc").show();
-                    $(".specialty-card").not(this).find(".specialty-desc").hide();
-                }
-            });
-
-            $("#btn-next-specialty").click(function () {
-                navigateToStep("step-doctor");
-                loadDoctors(selectedSpecialty);
-            });
-
-            // Paso 2: Selección de doctor
-            $("#btn-back-doctor").click(function () {
-                navigateToStep("step-specialty");
-            });
-
-            $("#btn-next-doctor").click(function () {
-                navigateToStep("step-schedule");
-                // Resetear selecciones de fecha/hora al cambiar de doctor
-                selectedDate = null;
-                selectedTime = null;
-                $("#datepicker").val("");
-                $("#time-slots").empty();
-                $("#btn-confirm-appointment").prop("disabled", true);
-
-                // Actualizar calendario con las fechas disponibles del doctor
-                $("#datepicker").datepicker("refresh");
-            });
-
-            // Paso 3: Selección de fecha y hora
-            $("#btn-back-schedule").click(function () {
-                navigateToStep("step-doctor");
-            });
-
-            $("#btn-confirm-appointment").click(function () {
-                showConfirmationModal();
-            });
-
-            $("#urgency").change(function () {
-                isUrgent = $(this).val() === "yes";
-            });
-
-            // Modal
-            $("#btn-finish-booking").click(function () {
-                closeModal();
-                resetFlow();
-            });
-
-            // Funciones auxiliares
-            function navigateToStep(stepId) {
-                $(`#${currentStep}`).removeClass("active").addClass("hidden");
-                $(`#${stepId}`).removeClass("hidden").addClass("active");
-                currentStep = stepId;
-
-                // Scroll suave al inicio del paso
-                window.scrollTo({
-                    top: $(`#${stepId}`).offset().top - 120,
-                    behavior: 'smooth'
-                });
+            function initializeApp() {
+                loadSpecialties();
+                setupDatePicker();
+                setupEventListeners();
+                updateProgress();
             }
 
-            // Función para hacer scroll horizontal
+            function loadSpecialties() {
+                const $grid = $("#specialties-grid");
+                $grid.empty();
 
-
-            function loadDoctors(specialty) {
-                const $doctorsList = $("#doctors-scroll");
-                $doctorsList.empty();
-
-                $("#doctor-details").hide();
-                $("#btn-next-doctor").prop("disabled", true);
-
-                if (specialty.doctors && specialty.doctors.length > 0) {
-                    specialty.doctors.forEach(doctor => {
-                        const badge = doctor.badge ? `<div class="doctor-badge">${doctor.badge}</div>` : '';
-
-                        $doctorsList.append(`
-                            <div class="doctor-card" data-doctor-id="${doctor.id}">
-                                <div class="doctor-image">
-                                    ${badge}
-                                    image s
-                                    <i class="fas fa-user-md" style="font-size: 3rem;"></i>
-                                </div>
-                                <div class="doctor-info">
-                                    <h4 class="doctor-name">${doctor.name}</h4>
-                                    <p class="doctor-specialty">${doctor.specialty}</p>
-                                    <div class="doctor-meta">
-                                        <div class="doctor-rating">${getRatingStars(doctor.rating)} ${doctor.rating}</div>
-                                        <div class="doctor-price">${doctor.price}</div>
-                                    </div>
-                                    <p class="doctor-bio">${doctor.bio}</p>
-                                    
-                                </div>
+                specialties.forEach(specialty => {
+                    $grid.append(`
+                        <div class="specialty-card" data-specialty="${specialty.id}">
+                            <div class="specialty-icon">
+                                <i class="fas fa-${specialty.icon}"></i>
                             </div>
-                        `);
-                    });
-
-                    $(".doctor-card").click(function () {
-                        $(".doctor-card").removeClass("active");
-                        $(this).addClass("active");
-
-                        const doctorId = $(this).data("doctor-id");
-                        selectedDoctor = specialty.doctors.find(d => d.id === doctorId);
-
-                        // Mostrar detalles del doctor
-                        $("#doctor-selected-name").text(selectedDoctor.name);
-                        $("#doctor-selected-specialty").text(selectedDoctor.specialty);
-                        $("#doctor-selected-rating").html(`${getRatingStars(selectedDoctor.rating)} ${selectedDoctor.rating}`);
-                        $("#doctor-selected-price").text(selectedDoctor.price);
-                        $("#doctor-selected-bio").text(selectedDoctor.bio);
-                        $("#doctor-details").show();
-
-                        $("#btn-next-doctor").prop("disabled", false);
-                    });
-                } else {
-                    $doctorsList.append(`<p style="padding: var(--spacing-lg);">No hay doctores disponibles para ${specialty.name}.</p>`);
-                }
-            }
-
-            function updateTimeSlots() {
-                if (!selectedDoctor || !selectedDate) return;
-
-                const $timeSlots = $("#time-slots");
-                $timeSlots.empty();
-
-                // Todos los posibles horarios (podrían venir del backend)
-                const allTimeSlots = ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00"];
-
-                // Obtener horarios ocupados para esta fecha del doctor seleccionado
-                const doctorUnavailable = backendAvailability[selectedDoctor.id];
-                let unavailableTimes = [];
-
-                if (doctorUnavailable && doctorUnavailable.unavailableSlots[selectedDate]) {
-                    unavailableTimes = doctorUnavailable.unavailableSlots[selectedDate];
-                }
-
-                // Generar los slots de tiempo
-                allTimeSlots.forEach(time => {
-                    const isUnavailable = unavailableTimes.includes(time);
-
-                    $timeSlots.append(`
-                        <div class="time-slot ${isUnavailable ? 'unavailable' : ''}" 
-                             data-time="${time}" 
-                             ${isUnavailable ? 'title="Horario no disponible"' : ''}>
-                            ${time}
-                            ${isUnavailable ? '<i class="fas fa-times"></i>' : ''}
+                            <h3 class="specialty-name">${specialty.name}</h3>
+                            <p class="specialty-desc">${specialty.description}</p>
                         </div>
                     `);
                 });
 
-                // Evento click para selección de horario (solo disponibles)
-                $(".time-slot:not(.unavailable)").click(function () {
+                // Auto-avanzar al seleccionar especialidad
+                $(".specialty-card").click(function() {
+                    $(".specialty-card").removeClass("active");
+                    $(this).addClass("active");
+
+                    const specialtyId = $(this).data("specialty");
+                    selectedSpecialty = specialties.find(s => s.id === specialtyId);
+
+                    // Avanzar automáticamente después de una pequeña pausa
+                    setTimeout(() => {
+                        nextStep();
+                    }, 800);
+                });
+            }
+
+            function loadDoctors() {
+                const $grid = $("#doctors-grid");
+                $grid.empty();
+
+                if (!selectedSpecialty?.doctors) return;
+
+                selectedSpecialty.doctors.forEach(doctor => {
+                    $grid.append(`
+                        <div class="doctor-card" data-doctor-id="${doctor.id}">
+                            <div class="doctor-image">
+                                <div class="doctor-badge">${doctor.badge}</div>
+                                <i class="fas fa-user-md" style="font-size: 4rem;"></i>
+                            </div>
+                            <div class="doctor-info">
+                                <h3 class="doctor-name">${doctor.name}</h3>
+                                <p class="doctor-specialty">${doctor.specialty}</p>
+                                <div class="doctor-meta">
+                                    <div class="doctor-rating">
+                                        ${getRatingStars(doctor.rating)} ${doctor.rating}
+                                    </div>
+                                    <div class="doctor-price">$${doctor.price}</div>
+                                </div>
+                                <p class="doctor-bio">${doctor.bio}</p>
+                            </div>
+                        </div>
+                    `);
+                });
+
+                // Auto-avanzar al seleccionar doctor
+                $(".doctor-card").click(function() {
+                    $(".doctor-card").removeClass("active");
+                    $(this).addClass("active");
+
+                    const doctorId = $(this).data("doctor-id");
+                    selectedDoctor = selectedSpecialty.doctors.find(d => d.id === doctorId);
+
+                    // Avanzar automáticamente
+                    setTimeout(() => {
+                        nextStep();
+                    }, 800);
+                });
+            }
+
+            function setupDatePicker() {
+                $("#datepicker").datepicker({
+                    dateFormat: "dd/mm/yy",
+                    minDate: 0,
+                    beforeShowDay: function(date) {
+                        const day = date.getDay();
+                        if (day === 0 || day === 6) {
+                            return [false, "", "Fin de semana"];
+                        }
+                        return [true, "available", "Disponible"];
+                    },
+                    onSelect: function(dateText) {
+                        selectedDate = dateText;
+                        updateTimeSlots();
+                        checkScheduleCompletion();
+                    }
+                });
+            }
+
+            function updateTimeSlots() {
+                const $slots = $("#time-slots");
+                $slots.empty();
+
+                const timeSlots = ["08:00", "09:00", "10:00", "11:00", "12:00", 
+                                 "14:00", "15:00", "16:00", "17:00", "18:00"];
+
+                timeSlots.forEach(time => {
+                    $slots.append(`
+                        <div class="time-slot" data-time="${time}">
+                            ${time}
+                        </div>
+                    `);
+                });
+
+                $(".time-slot").click(function() {
                     $(".time-slot").removeClass("selected");
                     $(this).addClass("selected");
                     selectedTime = $(this).data("time");
+                    
                     checkScheduleCompletion();
+                    
+                    // Auto-avanzar si tiene fecha y hora
+                    if (selectedDate && selectedTime) {
+                        setTimeout(() => {
+                            nextStep();
+                        }, 500);
+                    }
                 });
             }
+
+            function setupEventListeners() {
+                // Tipo de consulta
+                $(".consultation-option").click(function() {
+                    $(".consultation-option").removeClass("active");
+                    $(this).addClass("active");
+                    consultationType = $(this).data("type");
+                });
+
+                // Método de pago
+                $(".payment-method").click(function() {
+                    $(".payment-method").removeClass("active");
+                    $(this).addClass("active");
+                    paymentMethod = $(this).data("method");
+                    updatePaymentForm();
+                });
+
+                // Botón de pago
+                $("#btn-pay").click(function() {
+                    processPayment();
+                });
+
+                // Navegación móvil
+                $("#mobile-back").click(function() {
+                    previousStep();
+                });
+
+                $("#mobile-next").click(function() {
+                    nextStep();
+                });
+            }
+
+            function nextStep() {
+                if (currentStep < 4) {
+                    // Ocultar paso actual
+                    $(`#step-${getStepName(currentStep)}`).removeClass("active").addClass("hidden");
+                    
+                    currentStep++;
+                    
+                    // Mostrar siguiente paso
+                    setTimeout(() => {
+                        $(`#step-${getStepName(currentStep)}`).removeClass("hidden").addClass("active");
+                        
+                        // Cargar contenido según el paso
+                        switch(currentStep) {
+                            case 2:
+                                loadDoctors();
+                                break;
+                            case 4:
+                                loadPaymentSummary();
+                                break;
+                        }
+                        
+                        updateProgress();
+                        updateMobileNav();
+                        
+                        // Scroll suave al top
+                        $('html, body').animate({
+                            scrollTop: $('.progress-indicator').offset().top
+                        }, 500);
+                    }, 300);
+                }
+            }
+
+            function previousStep() {
+                if (currentStep > 1) {
+                    $(`#step-${getStepName(currentStep)}`).removeClass("active").addClass("hidden");
+                    currentStep--;
+                    
+                    setTimeout(() => {
+                        $(`#step-${getStepName(currentStep)}`).removeClass("hidden").addClass("active");
+                        updateProgress();
+                        updateMobileNav();
+                    }, 300);
+                }
+            }
+
+            function getStepName(step) {
+                const steps = ['', 'specialty', 'doctor', 'schedule', 'payment'];
+                return steps[step];
+            }
+
+            function updateProgress() {
+                // Actualizar círculos de progreso
+                for (let i = 1; i <= 4; i++) {
+                    const $step = $(`#progress-${i}`);
+                    $step.removeClass("active completed");
+                    
+                    if (i < currentStep) {
+                        $step.addClass("completed");
+                        $step.find(".progress-step-circle").html('<i class="fas fa-check"></i>');
+                    } else if (i === currentStep) {
+                        $step.addClass("active");
+                        $step.find(".progress-step-circle").text(i);
+                    } else {
+                        $step.find(".progress-step-circle").text(i);
+                    }
+                }
+
+                // Actualizar línea de progreso
+                const progressWidth = ((currentStep - 1) / 3) * 100;
+                $("#progress-line").css("width", `${progressWidth}%`);
+            }
+
+            function updateMobileNav() {
+                const $backBtn = $("#mobile-back");
+                const $nextBtn = $("#mobile-next");
+
+                if (currentStep > 1) {
+                    $backBtn.show();
+                } else {
+                    $backBtn.hide();
+                }
+
+                if (currentStep === 4) {
+                    $nextBtn.hide();
+                } else {
+                    $nextBtn.show();
+                    $nextBtn.prop("disabled", !canProceed());
+                }
+            }
+
+            function canProceed() {
+                switch(currentStep) {
+                    case 1:
+                        return selectedSpecialty !== null;
+                    case 2:
+                        return selectedDoctor !== null;
+                    case 3:
+                        return selectedDate !== null && selectedTime !== null;
+                    case 4:
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+
             function checkScheduleCompletion() {
-                $("#btn-confirm-appointment").prop("disabled", !(selectedDate && selectedTime));
+                // Esta función se mantiene para compatibilidad pero la navegación es automática
+                updateMobileNav();
+            }
+
+            function loadPaymentSummary() {
+                const basePrice = selectedDoctor?.price || 50;
+                const urgentFee = consultationType === 'urgent' ? 20 : 0;
+                const totalPrice = basePrice + urgentFee;
+                const payNow = Math.ceil(totalPrice / 2);
+
+                $("#payment-amount").text(`$${payNow}`);
+
+                const summary = `
+                    <div style="background: var(--color-gray-50); padding: var(--spacing-lg); border-radius: var(--border-radius-lg); margin-bottom: var(--spacing-lg);">
+                        <h3 style="margin-bottom: var(--spacing-md); color: var(--color-primary);">
+                            <i class="fas fa-clipboard-list"></i> Resumen de tu cita
+                        </h3>
+                        <div style="display: grid; gap: var(--spacing-sm);">
+                            <div style="display: flex; justify-content: space-between;">
+                                <span><strong>Especialidad:</strong></span>
+                                <span>${selectedSpecialty?.name}</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span><strong>Médico:</strong></span>
+                                <span>${selectedDoctor?.name}</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span><strong>Fecha:</strong></span>
+                                <span>${selectedDate}</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span><strong>Hora:</strong></span>
+                                <span>${selectedTime}</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span><strong>Tipo:</strong></span>
+                                <span>${consultationType === 'urgent' ? 'Urgente' : 'Normal'}</span>
+                            </div>
+                            <hr style="margin: var(--spacing-sm) 0;">
+                            <div style="display: flex; justify-content: space-between; font-weight: bold; color: var(--color-primary);">
+                                <span>Total:</span>
+                                <span>$${totalPrice}</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: var(--text-secondary);">
+                                <span>Pagas ahora (50%):</span>
+                                <span>$${payNow}</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: var(--text-secondary);">
+                                <span>Pagas en consulta:</span>
+                                <span>$${totalPrice - payNow}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                $("#appointment-summary").html(summary);
+            }
+
+            function updatePaymentForm() {
+                $(".payment-form").removeClass("active");
+                $(`#${paymentMethod}-form`).addClass("active");
+            }
+
+            function processPayment() {
+                const $btn = $("#btn-pay");
+                const originalText = $btn.html();
+                
+                // Mostrar loading
+                $btn.html('<div class="loading"></div> Procesando pago...');
+                $btn.prop("disabled", true);
+
+                // Simular procesamiento
+                setTimeout(() => {
+                    $btn.html(originalText);
+                    $btn.prop("disabled", false);
+                    showConfirmationModal();
+                }, 3000);
             }
 
             function showConfirmationModal() {
-                const doctorName = selectedDoctor.name;
-                const specialtyName = selectedSpecialty.name;
-                const date = new Date(selectedDate);
-                const formattedDate = date.toLocaleDateString('es-ES', {
-                    weekday: 'long',
-                    day: 'numeric',
-                    month: 'long',
-                    year: 'numeric'
-                });
-
-                let message = `
-                    <p><strong>Cita médica confirmada</strong></p>
-                    <p>Especialidad: ${specialtyName}</p>
-                    <p>Médico: ${doctorName}</p>
-                    <p>Fecha: ${formattedDate}</p>
-                    <p>Hora: ${selectedTime}</p>
-                    <p>Consultorio: #${Math.floor(Math.random() * 20) + 1}</p>
-                `;
-
-                if (isUrgent) {
-                    message += `<p><strong>Tipo:</strong> Consulta urgente (+$20)</p>`;
-                }
-
-                message += `
-                    <p style="margin-top: 1rem;">Recibirás un correo electrónico con los detalles de tu cita.</p>
-                    <p><strong>¡Gracias por confiar en SaludPlus!</strong></p>
+                const message = `
+                    <div style="text-align: left; padding: var(--spacing-md);">
+                        <h4 style="color: var(--color-primary); margin-bottom: var(--spacing-md);">
+                            🎉 Tu cita ha sido confirmada exitosamente
+                        </h4>
+                        <div style="background: var(--color-gray-50); padding: var(--spacing-md); border-radius: var(--border-radius); margin-bottom: var(--spacing-md);">
+                            <p><strong>📋 Detalles de la cita:</strong></p>
+                            <p>• <strong>Especialidad:</strong> ${selectedSpecialty?.name}</p>
+                            <p>• <strong>Médico:</strong> ${selectedDoctor?.name}</p>
+                            <p>• <strong>Fecha:</strong> ${selectedDate}</p>
+                            <p>• <strong>Hora:</strong> ${selectedTime}</p>
+                            <p>• <strong>Consultorio:</strong> #${Math.floor(Math.random() * 20) + 1}</p>
+                        </div>
+                        <div style="background: var(--color-success); color: white; padding: var(--spacing-md); border-radius: var(--border-radius); text-align: center;">
+                            <p><strong>💳 Pago confirmado</strong></p>
+                            <p>Se ha procesado tu pago del 50% ($${Math.ceil((selectedDoctor?.price || 50) / 2)})</p>
+                        </div>
+                        <p style="margin-top: var(--spacing-md); font-size: 0.9rem; color: var(--text-secondary);">
+                            📧 Recibirás un correo con todos los detalles y el código QR para tu cita.
+                            <br>📱 También puedes descargar nuestra app para recibir recordatorios.
+                        </p>
+                    </div>
                 `;
 
                 $("#confirmation-message").html(message);
                 $("#confirmation-modal").addClass("active");
-            }
-
-            function closeModal() {
-                $("#confirmation-modal").removeClass("active");
-            }
-
-            function resetFlow() {
-                // Resetear todas las selecciones
-                $(".specialty-card").removeClass("active");
-                $(".doctor-card").removeClass("active");
-                $(".time-slot").removeClass("selected");
-
-                selectedSpecialty = null;
-                selectedDoctor = null;
-                selectedDate = null;
-                selectedTime = null;
-                isUrgent = false;
-
-                // Resetear controles
-                $("#btn-next-specialty").prop("disabled", true);
-                $("#btn-next-doctor").prop("disabled", true);
-                $("#btn-confirm-appointment").prop("disabled", true);
-                $("#urgency").val("no");
-                $("#datepicker").val("");
-                $("#time-slots").empty();
-                $("#doctor-details").hide();
-
-                // Volver al primer paso
-                navigateToStep("step-specialty");
             }
 
             function getRatingStars(rating) {
@@ -1594,7 +1757,6 @@
                     stars += '<i class="fas fa-star-half-alt"></i>';
                 }
 
-                // Rellenar con estrellas vacías si es necesario
                 const emptyStars = 5 - Math.ceil(rating);
                 for (let i = 0; i < emptyStars; i++) {
                     stars += '<i class="far fa-star"></i>';
@@ -1603,37 +1765,57 @@
                 return stars;
             }
 
-
-
-            // Mostrar descripción de especialidad al hacer hover en desktop
-            if (window.innerWidth > 768) {
-                $(".specialty-card").hover(
-                    function () {
-                        $(this).find(".specialty-desc").stop(true, true).fadeIn(200);
-                    },
-                    function () {
-                        $(this).find(".specialty-desc").stop(true, true).fadeOut(200);
-                    }
-                );
+            // Función global para cerrar modal
+            window.closeModal = function() {
+                $("#confirmation-modal").removeClass("active");
             }
-        });
-        // Scroll horizontal para especialidades
-        function scrollSpecialties(direction) {
-            const container = document.getElementById('specialties-scroll');
-            container.scrollBy({
-                left: direction * 200,
-                behavior: 'smooth'
-            });
-        }
 
-        // Scroll horizontal para doctores
-        function scrollDoctors(direction) {
-            const container = document.getElementById('doctors-scroll');
-            container.scrollBy({
-                left: direction * 250,
-                behavior: 'smooth'
+            // Función global para resetear flujo
+            window.resetFlow = function() {
+                // Resetear variables
+                currentStep = 1;
+                selectedSpecialty = null;
+                selectedDoctor = null;
+                selectedDate = null;
+                selectedTime = null;
+                consultationType = 'normal';
+                paymentMethod = 'card';
+
+                // Resetear UI
+                $(".specialty-card, .doctor-card, .consultation-option, .payment-method").removeClass("active");
+                $(".consultation-option[data-type='normal']").addClass("active");
+                $(".payment-method[data-method='card']").addClass("active");
+                $("#datepicker").val("");
+                $("#time-slots").empty();
+
+                // Mostrar solo primer paso
+                $(".step-container").removeClass("active").addClass("hidden");
+                $("#step-specialty").removeClass("hidden").addClass("active");
+
+                updateProgress();
+                updateMobileNav();
+                closeModal();
+
+                // Scroll to top
+                $('html, body').animate({ scrollTop: 0 }, 500);
+            }
+
+            // Formatear números de tarjeta
+            $(document).on('input', 'input[placeholder*="1234"]', function() {
+                let value = $(this).val().replace(/\s/g, '').replace(/[^0-9]/gi, '');
+                let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
+                $(this).val(formattedValue);
             });
-        }
+
+            // Formatear fecha de vencimiento
+            $(document).on('input', 'input[placeholder="MM/AA"]', function() {
+                let value = $(this).val().replace(/\D/g, '');
+                if (value.length >= 2) {
+                    value = value.substring(0,2) + '/' + value.substring(2,4);
+                }
+                $(this).val(value);
+            });
+        });
     </script>
 </body>
 
