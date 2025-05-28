@@ -32,6 +32,11 @@
             --color-gray-800: #1E293B;
             --color-gray-900: #0F172A;
 
+            /* Yape colors */
+            --color-yape: #7B2CBF;
+            --color-yape-light: #9747D6;
+            --color-yape-dark: #5A1A8B;
+
             /* Texto */
             --text-primary: #1E293B;
             --text-secondary: #64748B;
@@ -620,6 +625,7 @@
             cursor: pointer;
             transition: all var(--transition-fast);
             text-align: center;
+            position: relative;
         }
 
         .payment-method:hover {
@@ -631,6 +637,24 @@
             border-color: var(--color-primary);
             background: var(--color-primary);
             color: var(--color-white);
+        }
+
+        /* Estilos específicos para Yape */
+        .payment-method[data-method="yape"] {
+            background: linear-gradient(135deg, var(--color-yape-light), var(--color-yape));
+            color: var(--color-white);
+            border-color: var(--color-yape);
+        }
+
+        .payment-method[data-method="yape"]:hover {
+            border-color: var(--color-yape-dark);
+            background: linear-gradient(135deg, var(--color-yape), var(--color-yape-dark));
+        }
+
+        .payment-method[data-method="yape"].active {
+            background: linear-gradient(135deg, var(--color-yape-dark), var(--color-yape));
+            border-color: var(--color-yape-dark);
+            box-shadow: 0 8px 25px rgba(123, 44, 191, 0.3);
         }
 
         .payment-method-icon {
@@ -677,6 +701,84 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: var(--spacing-md);
+        }
+
+        /* Yape QR Code Section */
+        .yape-qr-section {
+            text-align: center;
+            background: linear-gradient(135deg, var(--color-yape-light), var(--color-yape));
+            color: var(--color-white);
+            padding: var(--spacing-xl);
+            border-radius: var(--border-radius-lg);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .yape-qr-code {
+            width: 200px;
+            height: 200px;
+            background: var(--color-white);
+            border-radius: var(--border-radius);
+            margin: var(--spacing-lg) auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .yape-qr-placeholder {
+            font-size: 4rem;
+            color: var(--color-yape);
+            animation: pulse 2s infinite;
+        }
+
+        .yape-instructions {
+            background: var(--color-white);
+            color: var(--text-primary);
+            padding: var(--spacing-lg);
+            border-radius: var(--border-radius);
+            margin-top: var(--spacing-lg);
+        }
+
+        .yape-steps {
+            text-align: left;
+            margin-top: var(--spacing-md);
+        }
+
+        .yape-step {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+            padding: var(--spacing-sm);
+            background: var(--color-gray-50);
+            border-radius: var(--border-radius);
+        }
+
+        .yape-step-number {
+            width: 30px;
+            height: 30px;
+            background: var(--color-yape);
+            color: var(--color-white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .yape-timer {
+            background: var(--color-warning);
+            color: var(--color-white);
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            margin-top: var(--spacing-md);
         }
 
         /* Barra de navegación inferior móvil */
@@ -787,14 +889,25 @@
             box-shadow: var(--shadow-xl);
         }
 
-        /* Modal mejorado */
+        .btn-yape {
+            background: linear-gradient(135deg, var(--color-yape), var(--color-yape-light));
+            color: var(--color-white);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-yape:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(123, 44, 191, 0.3);
+        }
+
+        /* Modal mejorado y responsivo */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(0, 0, 0, 0.7);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -802,8 +915,8 @@
             opacity: 0;
             pointer-events: none;
             transition: opacity var(--transition-medium);
-            padding: var(--spacing-lg);
-            backdrop-filter: blur(10px);
+            padding: var(--spacing-md);
+            backdrop-filter: blur(15px);
         }
 
         .modal-overlay.active {
@@ -814,9 +927,11 @@
         .modal-content {
             background: var(--color-white);
             border-radius: var(--border-radius-xl);
-            padding: var(--spacing-xxl);
-            max-width: 600px;
+            padding: var(--spacing-lg);
+            max-width: 500px;
             width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
             box-shadow: var(--shadow-xl);
             transform: translateY(30px) scale(0.9);
             transition: transform var(--transition-medium);
@@ -829,20 +944,21 @@
 
         .modal-close {
             position: absolute;
-            top: var(--spacing-lg);
-            right: var(--spacing-lg);
+            top: var(--spacing-md);
+            right: var(--spacing-md);
             background: var(--color-gray-100);
             border: none;
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: var(--text-secondary);
             cursor: pointer;
             transition: all var(--transition-fast);
+            z-index: 10;
         }
 
         .modal-close:hover {
@@ -850,17 +966,23 @@
             color: var(--color-white);
         }
 
+        .modal-header {
+            text-align: center;
+            margin-bottom: var(--spacing-lg);
+            padding-top: var(--spacing-sm);
+        }
+
         .modal-icon {
-            width: 80px;
-            height: 80px;
+            width: 70px;
+            height: 70px;
             background: linear-gradient(135deg, var(--color-success), #00E676);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--color-white);
-            font-size: 2.5rem;
-            margin: 0 auto var(--spacing-xl);
+            font-size: 2rem;
+            margin: 0 auto var(--spacing-md);
             animation: bounceIn 0.6s ease-out;
         }
 
@@ -871,24 +993,258 @@
         }
 
         .modal-title {
-            text-align: center;
-            font-size: 2rem;
+            font-size: 1.5rem;
             color: var(--color-success);
-            margin-bottom: var(--spacing-lg);
+            margin-bottom: var(--spacing-sm);
             font-weight: 700;
         }
 
-        .modal-message {
+        .modal-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .appointment-card {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+            color: var(--color-white);
+            border-radius: var(--border-radius-lg);
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+            box-shadow: var(--shadow-md);
+        }
+
+        .appointment-main-info {
             text-align: center;
-            margin-bottom: var(--spacing-xl);
-            line-height: 1.6;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .appointment-date-time {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: var(--border-radius);
+            padding: var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+            backdrop-filter: blur(10px);
+        }
+
+        .appointment-date {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .appointment-time {
             font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .appointment-details {
+            display: grid;
+            gap: var(--spacing-sm);
+        }
+
+        .appointment-detail {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-xs) 0;
+        }
+
+        .appointment-detail-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .appointment-detail-value {
+            font-weight: 600;
+            text-align: right;
+            flex: 1;
+            margin-left: var(--spacing-md);
+        }
+
+        .payment-confirmation {
+            background: var(--color-success);
+            border-radius: var(--border-radius);
+            padding: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+            text-align: center;
+            color: var(--color-white);
+        }
+
+        .payment-method-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            background: rgba(255, 255, 255, 0.2);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: var(--border-radius);
+            font-size: 0.85rem;
+            margin-top: var(--spacing-xs);
+        }
+
+        .important-info {
+            background: var(--color-gray-50);
+            border-left: 4px solid var(--color-warning);
+            padding: var(--spacing-md);
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .important-info-title {
+            font-weight: 600;
+            color: var(--color-warning);
+            margin-bottom: var(--spacing-xs);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+        }
+
+        .important-info-list {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .important-info-list li {
+            margin-bottom: var(--spacing-xs);
         }
 
         .modal-actions {
             display: flex;
+            flex-direction: column;
+            gap: var(--spacing-sm);
+        }
+
+        .action-button {
+            padding: var(--spacing-md) var(--spacing-lg);
+            border-radius: var(--border-radius);
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            display: flex;
+            align-items: center;
             justify-content: center;
-            gap: var(--spacing-md);
+            gap: var(--spacing-sm);
+            font-size: 0.95rem;
+        }
+
+        .action-button.primary {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+            color: var(--color-white);
+            box-shadow: var(--shadow-md);
+        }
+
+        .action-button.secondary {
+            background: var(--color-gray-100);
+            color: var(--text-primary);
+            border: 1px solid var(--color-gray-200);
+        }
+
+        .action-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Responsive para móvil */
+        @media (max-width: 768px) {
+            .modal-overlay {
+                padding: var(--spacing-sm);
+                align-items: flex-start;
+                padding-top: var(--spacing-lg);
+            }
+
+            .modal-content {
+                padding: var(--spacing-md);
+                max-height: 85vh;
+                border-radius: var(--border-radius-lg);
+            }
+
+            .modal-close {
+                top: var(--spacing-sm);
+                right: var(--spacing-sm);
+                width: 32px;
+                height: 32px;
+                font-size: 1rem;
+            }
+
+            .modal-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 1.8rem;
+            }
+
+            .modal-title {
+                font-size: 1.3rem;
+            }
+
+            .appointment-card {
+                padding: var(--spacing-md);
+            }
+
+            .appointment-date {
+                font-size: 1.2rem;
+            }
+
+            .appointment-time {
+                font-size: 1rem;
+            }
+
+            .appointment-detail {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: var(--spacing-xs);
+                padding: var(--spacing-sm) 0;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            }
+
+            .appointment-detail:last-child {
+                border-bottom: none;
+            }
+
+            .appointment-detail-value {
+                margin-left: 0;
+                text-align: left;
+                font-size: 1.05rem;
+            }
+
+            .important-info {
+                padding: var(--spacing-sm);
+            }
+
+            .important-info-list {
+                font-size: 0.85rem;
+            }
+
+            .action-button {
+                padding: var(--spacing-md);
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Muy pequeño (320px) */
+        @media (max-width: 400px) {
+            .modal-overlay {
+                padding: var(--spacing-xs);
+                padding-top: var(--spacing-md);
+            }
+
+            .modal-content {
+                padding: var(--spacing-sm);
+                max-height: 90vh;
+            }
+
+            .appointment-card {
+                padding: var(--spacing-sm);
+            }
+
+            .modal-title {
+                font-size: 1.2rem;
+            }
+
+            .appointment-date {
+                font-size: 1.1rem;
+            }
         }
 
         /* Animaciones adicionales */
@@ -944,11 +1300,16 @@
             }
 
             .payment-methods {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, 1fr);
             }
 
             .form-row {
                 grid-template-columns: 1fr;
+            }
+
+            .yape-qr-code {
+                width: 150px;
+                height: 150px;
             }
         }
 
@@ -1121,6 +1482,13 @@
                             </div>
                             <h4>Tarjeta de Crédito/Débito</h4>
                         </div>
+                        <div class="payment-method" data-method="yape">
+                            <div class="payment-method-icon">
+                                <i class="fas fa-mobile-alt"></i>
+                            </div>
+                            <h4>Yape</h4>
+                            <small>¡Pago instantáneo!</small>
+                        </div>
                         <div class="payment-method" data-method="paypal">
                             <div class="payment-method-icon">
                                 <i class="fab fa-paypal"></i>
@@ -1157,6 +1525,57 @@
                         </div>
                     </div>
 
+                    <!-- Formulario de Yape -->
+                    <div class="payment-form" id="yape-form">
+                        <div class="yape-qr-section">
+                            <h3 style="margin-bottom: var(--spacing-md);">
+                                <i class="fas fa-mobile-alt"></i> Pagar con Yape
+                            </h3>
+                            <p style="margin-bottom: var(--spacing-lg); opacity: 0.9;">
+                                Escanea el código QR con tu app de Yape
+                            </p>
+                            <div class="yape-qr-code">
+                                <div class="yape-qr-placeholder">
+                                    <i class="fas fa-qrcode"></i>
+                                </div>
+                            </div>
+                            <div class="yape-timer">
+                                <i class="fas fa-clock"></i>
+                                <span id="yape-countdown">14:59</span>
+                            </div>
+                        </div>
+                        
+                        <div class="yape-instructions">
+                            <h4 style="color: var(--color-yape); margin-bottom: var(--spacing-md);">
+                                <i class="fas fa-info-circle"></i> Instrucciones
+                            </h4>
+                            <div class="yape-steps">
+                                <div class="yape-step">
+                                    <div class="yape-step-number">1</div>
+                                    <div>Abre tu app de Yape y selecciona "Pagar con QR"</div>
+                                </div>
+                                <div class="yape-step">
+                                    <div class="yape-step-number">2</div>
+                                    <div>Escanea el código QR mostrado arriba</div>
+                                </div>
+                                <div class="yape-step">
+                                    <div class="yape-step-number">3</div>
+                                    <div>Confirma el monto de <strong id="yape-amount">S/. 93.50</strong></div>
+                                </div>
+                                <div class="yape-step">
+                                    <div class="yape-step-number">4</div>
+                                    <div>Completa el pago en tu app de Yape</div>
+                                </div>
+                            </div>
+                            <div style="background: var(--color-gray-50); padding: var(--spacing-md); border-radius: var(--border-radius); margin-top: var(--spacing-lg); text-align: center;">
+                                <small style="color: var(--text-secondary);">
+                                    <i class="fas fa-shield-alt"></i>
+                                    Tu pago está protegido y es completamente seguro
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Formulario de PayPal -->
                     <div class="payment-form" id="paypal-form">
                         <div class="form-group">
@@ -1186,7 +1605,7 @@
 
                     <button class="btn btn-success" id="btn-pay" style="width: 100%; margin-top: 2rem;">
                         <i class="fas fa-lock"></i>
-                        Pagar y Confirmar Cita
+                        <span id="pay-button-text">Pagar y Confirmar Cita</span>
                     </button>
                 </div>
             </div>
@@ -1209,17 +1628,96 @@
     <div class="modal-overlay" id="confirmation-modal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal()">&times;</button>
-            <div class="modal-icon">
-                <i class="fas fa-check-circle"></i>
+            
+            <div class="modal-header">
+                <div class="modal-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h3 class="modal-title">¡Cita Confirmada!</h3>
+                <p class="modal-subtitle">Tu reserva ha sido procesada exitosamente</p>
             </div>
-            <h3 class="modal-title">¡Cita confirmada!</h3>
-            <div class="modal-message" id="confirmation-message">
-                <!-- Se llena dinámicamente -->
+
+            <div class="appointment-card">
+                <div class="appointment-main-info">
+                    <div class="appointment-date-time">
+                        <div class="appointment-date" id="modal-date">Miércoles 15 de Enero</div>
+                        <div class="appointment-time" id="modal-time">10:30 AM</div>
+                    </div>
+                </div>
+
+                <div class="appointment-details">
+                    <div class="appointment-detail">
+                        <span class="appointment-detail-label">
+                            <i class="fas fa-user-md"></i> Médico
+                        </span>
+                        <span class="appointment-detail-value" id="modal-doctor">Dr. Juan Pérez</span>
+                    </div>
+                    <div class="appointment-detail">
+                        <span class="appointment-detail-label">
+                            <i class="fas fa-stethoscope"></i> Especialidad
+                        </span>
+                        <span class="appointment-detail-value" id="modal-specialty">Medicina General</span>
+                    </div>
+                    <div class="appointment-detail">
+                        <span class="appointment-detail-label">
+                            <i class="fas fa-map-marker-alt"></i> Consultorio
+                        </span>
+                        <span class="appointment-detail-value" id="modal-office">Consultorio #5</span>
+                    </div>
+                    <div class="appointment-detail">
+                        <span class="appointment-detail-label">
+                            <i class="fas fa-clipboard-list"></i> Tipo
+                        </span>
+                        <span class="appointment-detail-value" id="modal-type">Consulta Normal</span>
+                    </div>
+                    <div class="appointment-detail">
+                        <span class="appointment-detail-label">
+                            <i class="fas fa-dollar-sign"></i> Total
+                        </span>
+                        <span class="appointment-detail-value" id="modal-total">$50.00</span>
+                    </div>
+                </div>
             </div>
+
+            <div class="payment-confirmation">
+                <div style="font-weight: 600; margin-bottom: var(--spacing-xs);">
+                    <i class="fas fa-check-circle"></i> Pago Confirmado
+                </div>
+                <div style="font-size: 0.9rem; opacity: 0.9;" id="modal-payment-info">
+                    Pagaste $25.00 • Resta $25.00 en consulta
+                </div>
+                <div class="payment-method-badge" id="modal-payment-method">
+                    <i class="fas fa-credit-card"></i>
+                    <span>Tarjeta de Crédito</span>
+                </div>
+            </div>
+
+            <div class="important-info">
+                <div class="important-info-title">
+                    <i class="fas fa-exclamation-circle"></i>
+                    Información Importante
+                </div>
+                <ul class="important-info-list">
+                    <li>📧 <strong>Confirmación enviada</strong> a tu correo electrónico</li>
+                    <li>⏰ <strong>Llega 15 minutos antes</strong> de tu cita</li>
+                    <li>🆔 <strong>Trae tu DNI</strong> y comprobante de pago</li>
+                    <li>💰 <strong>Paga el resto</strong> ($<span id="modal-remaining">25</span>) en recepción</li>
+                    <li>📱 <strong>Código de cita:</strong> #<span id="modal-code">SLD2025-001</span></li>
+                </ul>
+            </div>
+
             <div class="modal-actions">
-                <button class="btn btn-success" onclick="resetFlow()">
+                <button class="action-button primary" onclick="downloadAppointment()">
+                    <i class="fas fa-download"></i>
+                    Descargar Comprobante
+                </button>
+                <button class="action-button secondary" onclick="addToCalendar()">
+                    <i class="fas fa-calendar-plus"></i>
+                    Agregar al Calendario
+                </button>
+                <button class="action-button secondary" onclick="resetFlow()">
                     <i class="fas fa-home"></i>
-                    Volver al inicio
+                    Nueva Cita
                 </button>
             </div>
         </div>
@@ -1345,17 +1843,6 @@
                 }
             ];
 
-            // Disponibilidad simulada
-            const doctorAvailability = {
-                "doc-1": {
-                    unavailableDates: ["2024-12-25", "2024-12-31"],
-                    unavailableSlots: {
-                        "2024-12-20": ["10:00", "14:00"],
-                        "2024-12-21": ["09:00", "11:00"]
-                    }
-                }
-            };
-
             // Variables de estado
             let currentStep = 1;
             let selectedSpecialty = null;
@@ -1364,6 +1851,7 @@
             let selectedTime = null;
             let consultationType = 'normal';
             let paymentMethod = 'card';
+            let yapeCountdown = null;
 
             // Inicializar aplicación
             initializeApp();
@@ -1426,7 +1914,7 @@
                                     <div class="doctor-rating">
                                         ${getRatingStars(doctor.rating)} ${doctor.rating}
                                     </div>
-                                    <div class="doctor-price">$${doctor.price}</div>
+                                    <div class="doctor-price">${doctor.price}</div>
                                 </div>
                                 <p class="doctor-bio">${doctor.bio}</p>
                             </div>
@@ -1646,7 +2134,11 @@
                 const totalPrice = basePrice + urgentFee;
                 const payNow = Math.ceil(totalPrice / 2);
 
-                $("#payment-amount").text(`$${payNow}`);
+                $("#payment-amount").text(`${payNow}`);
+
+                // Actualizar monto en Yape (convertir USD a PEN aproximadamente)
+                const yapeAmount = (payNow * 3.75).toFixed(2);
+                $("#yape-amount").text(`S/. ${yapeAmount}`);
 
                 const summary = `
                     <div style="background: var(--color-gray-50); padding: var(--spacing-lg); border-radius: var(--border-radius-lg); margin-bottom: var(--spacing-lg);">
@@ -1677,15 +2169,15 @@
                             <hr style="margin: var(--spacing-sm) 0;">
                             <div style="display: flex; justify-content: space-between; font-weight: bold; color: var(--color-primary);">
                                 <span>Total:</span>
-                                <span>$${totalPrice}</span>
+                                <span>${totalPrice}</span>
                             </div>
                             <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: var(--text-secondary);">
                                 <span>Pagas ahora (50%):</span>
-                                <span>$${payNow}</span>
+                                <span>${payNow}</span>
                             </div>
                             <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: var(--text-secondary);">
                                 <span>Pagas en consulta:</span>
-                                <span>$${totalPrice - payNow}</span>
+                                <span>${totalPrice - payNow}</span>
                             </div>
                         </div>
                     </div>
@@ -1697,25 +2189,128 @@
             function updatePaymentForm() {
                 $(".payment-form").removeClass("active");
                 $(`#${paymentMethod}-form`).addClass("active");
+                
+                // Actualizar botón de pago según el método
+                const $payBtn = $("#btn-pay");
+                const $payBtnText = $("#pay-button-text");
+                
+                $payBtn.removeClass("btn-success btn-yape");
+                
+                switch(paymentMethod) {
+                    case 'yape':
+                        $payBtn.addClass("btn-yape");
+                        $payBtnText.html('<i class="fas fa-mobile-alt"></i> Confirmar Pago con Yape');
+                        startYapeCountdown();
+                        break;
+                    case 'card':
+                        $payBtn.addClass("btn-success");
+                        $payBtnText.html('<i class="fas fa-credit-card"></i> Pagar con Tarjeta');
+                        stopYapeCountdown();
+                        break;
+                    case 'paypal':
+                        $payBtn.addClass("btn-success");
+                        $payBtnText.html('<i class="fab fa-paypal"></i> Pagar con PayPal');
+                        stopYapeCountdown();
+                        break;
+                    case 'transfer':
+                        $payBtn.addClass("btn-success");
+                        $payBtnText.html('<i class="fas fa-university"></i> Pagar con Transferencia');
+                        stopYapeCountdown();
+                        break;
+                }
+            }
+
+            function startYapeCountdown() {
+                let timeLeft = 15 * 60; // 15 minutos en segundos
+                
+                function updateCountdown() {
+                    const minutes = Math.floor(timeLeft / 60);
+                    const seconds = timeLeft % 60;
+                    const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                    $("#yape-countdown").text(timeString);
+                    
+                    if (timeLeft <= 0) {
+                        clearInterval(yapeCountdown);
+                        $("#yape-countdown").text("00:00");
+                        $("#yape-countdown").parent().css("background", "var(--color-error)");
+                        $("#yape-countdown").parent().html('<i class="fas fa-exclamation-triangle"></i> Tiempo expirado');
+                    } else {
+                        timeLeft--;
+                    }
+                }
+                
+                updateCountdown();
+                yapeCountdown = setInterval(updateCountdown, 1000);
+            }
+
+            function stopYapeCountdown() {
+                if (yapeCountdown) {
+                    clearInterval(yapeCountdown);
+                    yapeCountdown = null;
+                }
             }
 
             function processPayment() {
                 const $btn = $("#btn-pay");
                 const originalText = $btn.html();
                 
+                // Diferentes mensajes según el método de pago
+                let loadingMessage = "Procesando pago...";
+                let processingTime = 3000;
+                
+                switch(paymentMethod) {
+                    case 'yape':
+                        loadingMessage = '<div class="loading"></div> Esperando confirmación de Yape...';
+                        processingTime = 4000; // Simular tiempo de confirmación de Yape
+                        break;
+                    case 'card':
+                        loadingMessage = '<div class="loading"></div> Procesando tarjeta...';
+                        break;
+                    case 'paypal':
+                        loadingMessage = '<div class="loading"></div> Redirigiendo a PayPal...';
+                        break;
+                    case 'transfer':
+                        loadingMessage = '<div class="loading"></div> Procesando transferencia...';
+                        processingTime = 5000; // Transferencia toma más tiempo
+                        break;
+                }
+                
                 // Mostrar loading
-                $btn.html('<div class="loading"></div> Procesando pago...');
+                $btn.html(loadingMessage);
                 $btn.prop("disabled", true);
 
                 // Simular procesamiento
                 setTimeout(() => {
                     $btn.html(originalText);
                     $btn.prop("disabled", false);
+                    stopYapeCountdown(); // Detener countdown si está activo
                     showConfirmationModal();
-                }, 3000);
+                }, processingTime);
             }
 
             function showConfirmationModal() {
+                // Mensaje personalizado según método de pago
+                let paymentMethodText = "";
+                switch(paymentMethod) {
+                    case 'yape':
+                        paymentMethodText = "💜 <strong>Pago con Yape confirmado</strong>";
+                        break;
+                    case 'card':
+                        paymentMethodText = "💳 <strong>Pago con tarjeta procesado</strong>";
+                        break;
+                    case 'paypal':
+                        paymentMethodText = "🅿️ <strong>Pago con PayPal completado</strong>";
+                        break;
+                    case 'transfer':
+                        paymentMethodText = "🏦 <strong>Transferencia procesada</strong>";
+                        break;
+                }
+
+                const basePrice = selectedDoctor?.price || 50;
+                const urgentFee = consultationType === 'urgent' ? 20 : 0;
+                const totalPrice = basePrice + urgentFee;
+                const payNow = Math.ceil(totalPrice / 2);
+
                 const message = `
                     <div style="text-align: left; padding: var(--spacing-md);">
                         <h4 style="color: var(--color-primary); margin-bottom: var(--spacing-md);">
@@ -1730,8 +2325,8 @@
                             <p>• <strong>Consultorio:</strong> #${Math.floor(Math.random() * 20) + 1}</p>
                         </div>
                         <div style="background: var(--color-success); color: white; padding: var(--spacing-md); border-radius: var(--border-radius); text-align: center;">
-                            <p><strong>💳 Pago confirmado</strong></p>
-                            <p>Se ha procesado tu pago del 50% ($${Math.ceil((selectedDoctor?.price || 50) / 2)})</p>
+                            <p>${paymentMethodText}</p>
+                            <p>Se ha procesado tu pago del 50% (${payNow})</p>
                         </div>
                         <p style="margin-top: var(--spacing-md); font-size: 0.9rem; color: var(--text-secondary);">
                             📧 Recibirás un correo con todos los detalles y el código QR para tu cita.
@@ -1781,6 +2376,9 @@
                 consultationType = 'normal';
                 paymentMethod = 'card';
 
+                // Detener countdown de Yape si está activo
+                stopYapeCountdown();
+
                 // Resetear UI
                 $(".specialty-card, .doctor-card, .consultation-option, .payment-method").removeClass("active");
                 $(".consultation-option[data-type='normal']").addClass("active");
@@ -1814,6 +2412,11 @@
                     value = value.substring(0,2) + '/' + value.substring(2,4);
                 }
                 $(this).val(value);
+            });
+
+            // Limpiar intervalos al cerrar la página
+            $(window).on('beforeunload', function() {
+                stopYapeCountdown();
             });
         });
     </script>
