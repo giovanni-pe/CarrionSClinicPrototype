@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sprint 15 - Mobile Appointment Booking | Jira Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --jira-blue: #0052CC;
+            --jira-blue-light: #E6F3FF;
+            --jira-gray: #F4F5F7;
+            --jira-gray-dark: #5E6C84;
+            --jira-green: #00875A;
+            --jira-red: #DE350B;
+            --jira-yellow: #FF8B00;
+            --jira-purple: #6554C0;
+            --border-color: #DFE1E6;
+            --text-primary: #172B4D;
+            --text-secondary: #5E6C84;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: #FAFBFC;
+            color: var(--text-primary);
+            line-height: 1.4;
+        }
+
+        .header {
+            background: var(--jira-blue);
+            color: white;
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .sprint-info {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .sprint-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .dashboard-nav {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 16px;
+        }
+
+        .nav-tab {
+            padding: 8px 16px;
+            border-radius: 4px;
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .nav-tab.active {
+            background: var(--jira-blue-light);
+            color: var(--jira-blue);
+        }
+
+        .sprint-overview {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .sprint-details {
+            background: white;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            padding: 24px;
+        }
+
+        .sprint-stats {
+            background: white;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            padding: 24px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+
+        .epic-card {
+            background: linear-gradient(135deg, var(--jira-purple), #8B5FBF);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        .epic-header {
+            display: flex;
+            align-items: center;
+            justify-content: between;
+            margin-bottom: 12px;
+        }
+
+        .epic-id {
+            background: rgba(255,255,255,0.2);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .epic-value {
+            color: #FFE082;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 16px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+        }
+
+        .stat-number {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--jira-gray);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 16px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--jira-green);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .stories-board {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .board-column {
+            background: var(--jira-gray);
+            border-radius: 8px;
+            min-height: 600px;
+        }
+
+        .column-header {
+            padding: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            border-bottom: 1px solid var(--border-color);
+            background: white;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .column-count {
+            background: var(--jira-gray-dark);
+            color: white;
+            border-radius: 12px;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .story-card {
+            background: white;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            margin: 12px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .story-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .story-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .story-id {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .story-points {
+            background: var(--jira-blue);
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .story-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .story-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 12px;
+        }
+
+        .priority-badge {
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .priority-high {
+            background: #FFEBE6;
+            color: var(--jira-red);
+        }
+
+        .priority-medium {
+            background: #FFF4E6;
+            color: var(--jira-yellow);
+        }
+
+        .assignee-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--jira-blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .task-list {
+            background: white;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 24px;
+        }
+
+        .task-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .task-item {
+            padding: 12px 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .task-item:last-child {
+            border-bottom: none;
+        }
+
+        .task-checkbox {
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .task-checkbox.checked {
+            background: var(--jira-green);
+            border-color: var(--jira-green);
+            color: white;
+        }
+
+        .task-text {
+            flex: 1;
+            font-size: 14px;
+        }
+
+        .task-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .risk-matrix {
+            background: white;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .risk-item {
+            padding: 16px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .risk-level {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .risk-high {
+            background: #FFEBE6;
+            color: var(--jira-red);
+        }
+
+        .risk-medium {
+            background: #FFF4E6;
+            color: var(--jira-yellow);
+        }
+
+        .risk-low {
+            background: #E6FCFF;
+            color: var(--jira-green);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 90%;
+            overflow-y: auto;
+            margin: 5% auto;
+            position: relative;
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        .acceptance-criteria {
+            background: var(--jira-gray);
+            padding: 16px;
+            border-radius: 6px;
+            margin: 16px 0;
+        }
+
+        .gherkin-scenario {
+            background: white;
+            border-left: 4px solid var(--jira-green);
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .timeline {
+            background: white;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 11px;
+            top: 24px;
+            bottom: -20px;
+            width: 2px;
+            background: var(--border-color);
+        }
+
+        .timeline-item:last-child::before {
+            display: none;
+        }
+
+        .timeline-dot {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--jira-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .timeline-content {
+            flex: 1;
+        }
+
+        .timeline-week {
+            font-weight: 600;
+            color: var(--jira-blue);
+            margin-bottom: 4px;
+        }
+
+        @media (max-width: 1200px) {
+            .stories-board {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sprint-overview {
+                grid-template-columns: 1fr;
+            }
+            
+            .stories-board {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fab fa-jira"></i>
+                <span>SaludPlus - Jira Dashboard</span>
+            </div>
+            <div class="sprint-info">
+                <div class="sprint-badge">Sprint 15</div>
+                <div>15 days remaining</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="container">
+        <nav class="dashboard-nav">
+            <a href="#" class="nav-tab active">Sprint Board</a>
+            <a href="#" class="nav-tab">Backlog</a>
+            <a href="#" class="nav-tab">Reports</a>
+            <a href="#" class="nav-tab">Timeline</a>
+        </nav>
+
+        <!-- Sprint Overview -->
+        <div class="sprint-overview">
+            <div class="sprint-details">
+                <h2 class="section-title">Sprint 15: Mobile Appointment Booking System</h2>
+                
+                <div class="epic-card">
+                    <div class="epic-header">
+                        <span class="epic-id">EPIC-MAB-001</span>
+                        <span class="epic-value">85 Story Points</span>
+                    </div>
+                    <h3>Mobile-First Medical Appointment System</h3>
+                    <p style="margin-top: 8px; opacity: 0.9;">Implement mobile-optimized appointment booking system without app download requirement, ensuring fluid and accessible user experience.</p>
+                </div>
+
+                <div>
+                    <h4 style="margin-bottom: 12px; font-weight: 600;">Business Objectives</h4>
+                    <ul style="list-style: none; padding-left: 0;">
+                        <li style="margin-bottom: 8px;"><i class="fas fa-target" style="color: var(--jira-green); margin-right: 8px;"></i>78% of users access from mobile devices</li>
+                        <li style="margin-bottom: 8px;"><i class="fas fa-chart-line" style="color: var(--jira-blue); margin-right: 8px;"></i>40% reduction in process abandonment vs native apps</li>
+                        <li style="margin-bottom: 8px;"><i class="fas fa-arrow-up" style="color: var(--jira-purple); margin-right: 8px;"></i>35% expected increase in appointment conversion</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="sprint-stats">
+                <h3 class="section-title">Sprint Progress</h3>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" style="color: var(--jira-blue);">42</div>
+                        <div class="stat-label">Total Story Points</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" style="color: var(--jira-green);">8</div>
+                        <div class="stat-label">Completed Points</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" style="color: var(--jira-yellow);">4</div>
+                        <div class="stat-label">User Stories</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" style="color: var(--jira-red);">19%</div>
+                        <div class="stat-label">Sprint Progress</div>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 style="margin-bottom: 8px;">Sprint Burndown</h4>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 19%;"></div>
+                    </div>
+                    <small style="color: var(--text-secondary);">8 of 42 story points completed</small>
+                </div>
+
+                <div style="margin-top: 20px;">
+                    <h4 style="margin-bottom: 12px;">Team Velocity</h4>
+                    <div style="font-size: 12px; color: var(--text-secondary);">
+                        <div>Last Sprint: 38 points</div>
+                        <div>Average: 35 points</div>
+                        <div style="color: var(--jira-green);">Projected: 42 points ↗</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stories Board -->
+        <div class="stories-board">
+            <!-- To Do Column -->
+            <div class="board-column">
+                <div class="column-header">
+                    <span>📋 To Do</span>
+                    <span class="column-count">3</span>
+                </div>
+                
+                <div class="story-card" onclick="openStoryModal('US-MAB-001')">
+                    <div class="story-header">
+                        <span class="story-id">US-MAB-001</span>
+                        <span class="story-points">13</span>
+                    </div>
+                    <div class="story-title">Mobile Calendar Interface</div>
+                    <div class="story-meta">
+                        <span class="priority-badge priority-high">Must Have</span>
+                        <span class="assignee-avatar">FE</span>
+                    </div>
+                </div>
+
+                <div class="story-card" onclick="openStoryModal('US-MAB-003')">
+                    <div class="story-header">
+                        <span class="story-id">US-MAB-003</span>
+                        <span class="story-points">13</span>
+                    </div>
+                    <div class="story-title">Appointment Confirmation System</div>
+                    <div class="story-meta">
+                        <span class="priority-badge priority-high">Must Have</span>
+                        <span class="assignee-avatar">BE</span>
+                    </div>
+                </div>
+
+                <div class="story-card" onclick="openStoryModal('US-MAB-004')">
+                    <div class="story-header">
+                        <span class="story-id">US-MAB-004</span>
+                        <span class="story-points">8</span>
+                    </div>
+                    <div class="story-title">Appointment Dashboard View</div>
+                    <div class="story-meta">
+                        <span class="priority-badge priority-medium">Should Have</span>
+                        <span class="assignee-avatar">FE</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- In Progress Column -->
+            <div class="board-column">
+                <div class="column-header">
+                    <span>🔄 In Progress</span>
+                    <span class="column-count">1</span>
+                </div>
+                
+                <div class="story-card" onclick="openStoryModal('US-MAB-002')">
+                    <div class="story-header">
+                        <span class="story-id">US-MAB-002</span>
+                        <span class="story-points">8</span>
+                    </div>
+                    <div class="story-title">Patient Data Collection Form</div>
+                    <div class="story-meta">
+                        <span class="priority-badge priority-high">Must Have</span>
+                        <span class="assignee-avatar">FE</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Review Column -->
+            <div class="board-column">
+                <div class="column-header">
+                    <span>👀 Review</span>
+                    <span class="column-count">0</span>
+                </div>
+            </div>
+
+            <!-- Done Column -->
+            <div class="board-column">
+                <div class="column-header">
+                    <span>✅ Done</span>
+                    <span class="column-count">0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tasks Section -->
+        <div class="task-list">
+            <div class="task-header">
+                <h3>Sprint Tasks</h3>
+                <span style="color: var(--text-secondary); font-size: 14px;">18 tasks total</span>
+            </div>
+            
+            <div class="task-item">
+                <div class="task-checkbox" onclick="toggleTask(this)">
+                    <i class="fas fa-check" style="display: none;"></i>
+                </div>
+                <div class="task-text">TASK-001: Design mobile calendar component</div>
+                <div class="task-meta">
+                    <span>5h</span>
+                    <span class="assignee-avatar">UX</span>
+                </div>
+            </div>
+
+            <div class="task-item">
+                <div class="task-checkbox checked" onclick="toggleTask(this)">
+                    <i class="fas fa-check"></i>
+                </div>
+                <div class="task-text">TASK-007: Implement form with real-time validation</div>
+                <div class="task-meta">
+                    <span>6h</span>
+                    <span class="assignee-avatar">FE</span>
+                </div>
+            </div>
+
+            <div class="task-item">
+                <div class="task-checkbox" onclick="toggleTask(this)">
+                    <i class="fas fa-check" style="display: none;"></i>
+                </div>
+                <div class="task-text">TASK-011: Implement appointment confirmation API</div>
+                <div class="task-meta">
+                    <span>8h</span>
+                    <span class="assignee-avatar">BE</span>
+                </div>
+            </div>
+
+            <div class="task-item">
+                <div class="task-checkbox" onclick="toggleTask(this)">
+                    <i class="fas fa-check" style="display: none;"></i>
+                </div>
+                <div class="task-text">TASK-016: Implement responsive appointments list</div>
+                <div class="task-meta">
+                    <span>6h</span>
+                    <span class="assignee-avatar">FE</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Risk Matrix -->
+        <div class="risk-matrix">
+            <div class="task-header">
+                <h3>Risk Register</h3>
+                <span style="color: var(--text-secondary); font-size: 14px;">3 risks tracked</span>
+            </div>
+            
+            <div class="risk-item">
+                <span class="risk-level risk-medium">Medium</span>
+                <div style="flex: 1;">
+                    <div style="font-weight: 600;">Browser compatibility issues</div>
+                    <div style="font-size: 12px; color: var(--text-secondary);">Mitigation: Extensive cross-browser testing, polyfills</div>
+                </div>
+                <span style="font-size: 12px; color: var(--text-secondary);">Low probability</span>
+            </div>
+
+            <div class="risk-item">
+                <span class="risk-level risk-high">High</span>
+                <div style="flex: 1;">
+                    <div style="font-weight: 600;">Performance on low-end devices</div>
+                    <div style="font-size: 12px; color: var(--text-secondary);">Mitigation: Performance monitoring, progressive loading</div>
+                </div>
+                <span style="font-size: 12px; color: var(--text-secondary);">Medium probability</span>
+            </div>
+
+            <div class="risk-item">
+                <span class="risk-level risk-high">High</span>
+                <div style="flex: 1;">
+                    <div style="font-weight: 600;">API rate limiting during peak hours</div>
+                    <div style="font-size: 12px; color: var(--text-secondary);">Mitigation: Caching strategy, queue system</div>
+                </div>
+                <span style="font-size: 12px; color: var(--text-secondary);">Medium probability</span>
+            </div>
+        </div>
+
+        <!-- Timeline -->
+        <div style="margin-top: 32px;">
+            <h3 class="section-title">Sprint Timeline</h3>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot">1</div>
+                    <div class="timeline-content">
+                        <div class="timeline-week">Week 1 (Days 1-5)</div>
+                        <div style="font-size: 14px; color: var(--text-secondary);">
+                            US-MAB-001: Mobile Calendar Interface
+                            <br>• Design & Architecture (Days 1-2)
+                            <br>• Development & Testing (Days 3-5)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot">2</div>
+                    <div class="timeline-content">
+                        <div class="timeline-week">Week 2 (Days 6-10)</div>
+                        <div style="font-size: 14px; color: var(--text-secondary);">
+                            US-MAB-002: Patient Data Form (Days 6-8)
+                            <br>US-MAB-003: Confirmation System Backend (Days 6-10)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot">3</div>
+                    <div class="timeline-content">
+                        <div class="timeline-week">Week 3 (Days 11-15)</div>
+                        <div style="font-size: 14px; color: var(--text-secondary);">
+                            US-MAB-003: Confirmation System Frontend (Days 11-13)
+                            <br>US-MAB-004: Dashboard View (Days 14-15)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Story Detail Modal -->
+    <div id="storyModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">User Story Details</h3>
+                <button class="close-modal" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Story data
+        const stories = {
+            'US-MAB-001': {
+                id: 'US-MAB-001',
+                title: 'Mobile Calendar Interface',
+                points: 13,
+                priority: 'Must Have',
+                assignee: 'Frontend Team',
+                description: 'Como paciente usando un dispositivo móvil, Quiero acceder a un calendario responsive y táctil, Para seleccionar fechas y horarios disponibles de manera intuitiva en pantalla pequeña.',
+                acceptanceCriteria: [
+                    {
+                        given: 'que el paciente accede desde un dispositivo móvil',
+                        when: 'navegue a la sección de agendamiento',
+                        then: 'debe ver un calendario optimizado para touch con fechas disponibles claramente marcadas, navegación por swipe o botones grandes, slots de tiempo en formato fácil de seleccionar, indicadores visuales de disponibilidad'
+                    },
+                    {
+                        given: 'que el paciente selecciona una fecha',
+                        when: 'toque en el calendario',
+                        then: 'debe mostrar horarios disponibles para esa fecha con botones de al menos 44px de altura, espaciado adecuado entre elementos, feedback visual inmediato al seleccionar'
+                    },
+                    {
+                        given: 'que el paciente está en modo landscape/portrait',
+                        when: 'rote el dispositivo',
+                        then: 'el calendario debe adaptarse manteniendo funcionalidad'
+                    }
+                ],
+                tasks: [
+                    'TASK-001: Diseñar componente de calendario responsive (5h - UX/UI Designer)',
+                    'TASK-002: Implementar calendario con react-datepicker mobile (8h - Frontend Developer)',
+                    'TASK-003: Desarrollar selector de horarios táctil (6h - Frontend Developer)',
+                    'TASK-004: Implementar validaciones de disponibilidad (4h - Frontend Developer)',
+                    'TASK-005: Testing responsive en múltiples dispositivos (3h - QA Engineer)'
+                ]
+            },
+            'US-MAB-002': {
+                id: 'US-MAB-002',
+                title: 'Patient Data Collection Form',
+                points: 8,
+                priority: 'Must Have',
+                assignee: 'Frontend Team',
+                description: 'Como paciente en dispositivo móvil, Quiero completar un formulario optimizado para mobile, Para ingresar mis datos personales de manera rápida y sin errores.',
+                acceptanceCriteria: [
+                    {
+                        given: 'que el paciente ha seleccionado fecha y hora',
+                        when: 'accede al formulario de datos personales',
+                        then: 'debe ver un formulario mobile-first con campos agrupados lógicamente, validación en tiempo real, teclados apropiados, autocompletado cuando sea posible'
+                    },
+                    {
+                        given: 'que el paciente está completando el formulario',
+                        when: 'ingrese datos inválidos',
+                        then: 'debe recibir feedback inmediato con mensajes de error claros y específicos, indicadores visuales de campos erróneos, sugerencias de corrección'
+                    },
+                    {
+                        given: 'que el paciente complete todos los campos requeridos',
+                        when: 'presione "Continuar"',
+                        then: 'el sistema debe validar y proceder al siguiente paso'
+                    }
+                ],
+                tasks: [
+                    'TASK-006: Diseñar flujo de formulario mobile (3h - UX Designer)',
+                    'TASK-007: Implementar formulario con validación real-time (6h - Frontend Developer)',
+                    'TASK-008: Integrar autocompletado y input types (4h - Frontend Developer)',
+                    'TASK-009: Implementar persistencia local temporal (3h - Frontend Developer)'
+                ]
+            },
+            'US-MAB-003': {
+                id: 'US-MAB-003',
+                title: 'Appointment Confirmation System',
+                points: 13,
+                priority: 'Must Have',
+                assignee: 'Backend Team + Frontend Team',
+                description: 'Como paciente, Quiero recibir confirmación inmediata de mi cita programada, Para tener la seguridad de que mi cita fue registrada correctamente.',
+                acceptanceCriteria: [
+                    {
+                        given: 'que el paciente ha completado el proceso de agendamiento',
+                        when: 'confirme la cita',
+                        then: 'debe recibir mensaje de éxito en pantalla con detalles de la cita, número de confirmación único, opción para agregar al calendario del dispositivo'
+                    },
+                    {
+                        given: 'que la cita ha sido confirmada',
+                        when: 'el sistema procese la información',
+                        then: 'debe enviar notificaciones a: Email del paciente (dentro de 2 minutos), SMS al teléfono registrado, Dashboard del médico correspondiente'
+                    },
+                    {
+                        given: 'que ocurra un error en el proceso',
+                        when: 'el sistema no pueda procesar la cita',
+                        then: 'debe mostrar mensaje de error claro y opciones de recuperación'
+                    }
+                ],
+                tasks: [
+                    'TASK-010: Diseñar pantalla de confirmación (2h - UX Designer)',
+                    'TASK-011: Implementar API de confirmación de citas (8h - Backend Developer)',
+                    'TASK-012: Desarrollar sistema de notificaciones (10h - Backend Developer)',
+                    'TASK-013: Implementar "Add to Calendar" functionality (4h - Frontend Developer)',
+                    'TASK-014: Crear templates de email/SMS (3h - Backend Developer)'
+                ]
+            },
+            'US-MAB-004': {
+                id: 'US-MAB-004',
+                title: 'Appointment Dashboard View',
+                points: 8,
+                priority: 'Should Have',
+                assignee: 'Frontend Team',
+                description: 'Como paciente registrado, Quiero ver mis citas programadas en un dashboard móvil, Para gestionar y revisar mis próximas consultas médicas.',
+                acceptanceCriteria: [
+                    {
+                        given: 'que el paciente ha agendado al menos una cita',
+                        when: 'accede a "Mis Citas" desde mobile',
+                        then: 'debe ver lista de citas próximas ordenadas por fecha, detalles resumidos, estado de cada cita, opciones de acción'
+                    },
+                    {
+                        given: 'que el paciente tiene múltiples citas',
+                        when: 'navegue por la lista',
+                        then: 'debe poder filtrar por estado o fecha, ver detalles expandidos al tocar una cita, acceder a acciones rápidas con gestos'
+                    },
+                    {
+                        given: 'que el paciente no tiene citas programadas',
+                        when: 'accede al dashboard',
+                        then: 'debe ver mensaje informativo y CTA para agendar nueva cita'
+                    }
+                ],
+                tasks: [
+                    'TASK-015: Diseñar dashboard de citas mobile (4h - UX Designer)',
+                    'TASK-016: Implementar lista de citas responsive (6h - Frontend Developer)',
+                    'TASK-017: Desarrollar filtros y búsqueda (4h - Frontend Developer)',
+                    'TASK-018: Implementar acciones de gestión (8h - Frontend Developer)'
+                ]
+            }
+        };
+
+        function openStoryModal(storyId) {
+            const story = stories[storyId];
+            if (!story) return;
+
+            document.getElementById('modalTitle').textContent = `${story.id}: ${story.title}`;
+            
+            const modalBody = document.getElementById('modalBody');
+            modalBody.innerHTML = `
+                <div style="margin-bottom: 24px;">
+                    <div style="display: flex; gap: 16px; margin-bottom: 16px;">
+                        <span style="background: var(--jira-blue); color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600;">${story.points} SP</span>
+                        <span style="background: var(--jira-red); color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600;">${story.priority}</span>
+                        <span style="background: var(--jira-gray); color: var(--text-primary); padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600;">${story.assignee}</span>
+                    </div>
+                    
+                    <h4 style="margin-bottom: 8px; color: var(--jira-blue);">User Story</h4>
+                    <p style="background: var(--jira-gray); padding: 16px; border-radius: 6px; border-left: 4px solid var(--jira-blue);">${story.description}</p>
+                </div>
+
+                <div style="margin-bottom: 24px;">
+                    <h4 style="margin-bottom: 12px; color: var(--jira-green);">Acceptance Criteria</h4>
+                    <div class="acceptance-criteria">
+                        ${story.acceptanceCriteria.map(criteria => `
+                            <div class="gherkin-scenario">
+                                <div style="font-weight: 600; color: var(--jira-green);">Given</div>
+                                <div style="margin-left: 16px; margin-bottom: 4px;">${criteria.given}</div>
+                                <div style="font-weight: 600; color: var(--jira-blue);">When</div>
+                                <div style="margin-left: 16px; margin-bottom: 4px;">${criteria.when}</div>
+                                <div style="font-weight: 600; color: var(--jira-purple);">Then</div>
+                                <div style="margin-left: 16px;">${criteria.then}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <div>
+                    <h4 style="margin-bottom: 12px; color: var(--jira-yellow);">Tasks</h4>
+                    <div style="background: white; border: 1px solid var(--border-color); border-radius: 6px;">
+                        ${story.tasks.map((task, index) => `
+                            <div style="padding: 12px 16px; border-bottom: 1px solid var(--border-color); ${index === story.tasks.length - 1 ? 'border-bottom: none;' : ''}">
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <div style="width: 16px; height: 16px; border: 2px solid var(--border-color); border-radius: 3px;"></div>
+                                    <span style="flex: 1; font-size: 14px;">${task}</span>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border-color);">
+                    <h4 style="margin-bottom: 12px;">Definition of Done</h4>
+                    <ul style="font-size: 14px; color: var(--text-secondary); line-height: 1.6;">
+                        <li>All acceptance criteria met</li>
+                        <li>Code reviewed and approved</li>
+                        <li>Unit tests written (>90% coverage)</li>
+                        <li>Integration tests passing</li>
+                        <li>Accessibility requirements met (WCAG 2.1 AA)</li>
+                        <li>Performance benchmarks achieved</li>
+                        <li>Cross-browser testing completed</li>
+                        <li>Security review passed</li>
+                        <li>Documentation updated</li>
+                        <li>Product Owner acceptance</li>
+                    </ul>
+                </div>
+            `;
+
+            document.getElementById('storyModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('storyModal').style.display = 'none';
+        }
+
+        function toggleTask(element) {
+            const isChecked = element.classList.contains('checked');
+            const icon = element.querySelector('i');
+            
+            if (isChecked) {
+                element.classList.remove('checked');
+                icon.style.display = 'none';
+            } else {
+                element.classList.add('checked');
+                icon.style.display = 'block';
+            }
+            
+            updateSprintProgress();
+        }
+
+        function updateSprintProgress() {
+            const totalTasks = document.querySelectorAll('.task-checkbox').length;
+            const completedTasks = document.querySelectorAll('.task-checkbox.checked').length;
+            const progressPercentage = Math.round((completedTasks / totalTasks) * 100);
+            
+            // Update progress bar
+            const progressBar = document.querySelector('.progress-fill');
+            progressBar.style.width = progressPercentage + '%';
+            
+            // Update completed points (simulated calculation)
+            const completedPoints = Math.round((completedTasks / totalTasks) * 42);
+            document.querySelector('.stat-number[style*="color: var(--jira-green)"]').textContent = completedPoints;
+            
+            // Update progress percentage
+            document.querySelector('.stat-number[style*="color: var(--jira-red)"]').textContent = progressPercentage + '%';
+            
+            // Update progress text
+            document.querySelector('small[style*="color: var(--text-secondary)"]').textContent = 
+                `${completedPoints} of 42 story points completed`;
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('storyModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Simulate real-time updates
+        function simulateRealtimeUpdates() {
+            // Simulate team activity
+            const activities = [
+                'Frontend Team moved US-MAB-002 to In Progress',
+                'QA Engineer completed testing for TASK-007',
+                'Backend Developer started TASK-011',
+                'UX Designer uploaded mockups for US-MAB-001',
+                'Product Owner approved US-MAB-004 acceptance criteria'
+            ];
+            
+            let activityIndex = 0;
+            setInterval(() => {
+                // Could show notifications or update status here
+                console.log(activities[activityIndex % activities.length]);
+                activityIndex++;
+            }, 10000);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set initial progress
+            updateSprintProgress();
+            
+            // Start simulated updates
+            simulateRealtimeUpdates();
+            
+            // Add keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeModal();
+                }
+            });
+        });
+
+        // Drag and drop functionality for stories (simplified)
+        function makeStoriesDraggable() {
+            const storyCards = document.querySelectorAll('.story-card');
+            
+            storyCards.forEach(card => {
+                card.draggable = true;
+                
+                card.addEventListener('dragstart', function(e) {
+                    e.dataTransfer.setData('text/plain', this.outerHTML);
+                    e.dataTransfer.setData('application/json', JSON.stringify({
+                        id: this.onclick.toString().match(/US-MAB-\d+/)[0],
+                        fromColumn: this.closest('.board-column').querySelector('.column-header span').textContent
+                    }));
+                    this.style.opacity = '0.5';
+                });
+                
+                card.addEventListener('dragend', function(e) {
+                    this.style.opacity = '1';
+                });
+            });
+        }
+
+        // Add drop zones
+        function addDropZones() {
+            const columns = document.querySelectorAll('.board-column');
+            
+            columns.forEach(column => {
+                column.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.style.background = '#f0f8ff';
+                });
+                
+                column.addEventListener('dragleave', function(e) {
+                    this.style.background = '';
+                });
+                
+                column.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.style.background = '';
+                    
+                    const data = JSON.parse(e.dataTransfer.getData('application/json'));
+                    const columnName = this.querySelector('.column-header span').textContent;
+                    
+                    console.log(`Moved ${data.id} from "${data.fromColumn}" to "${columnName}"`);
+                    
+                    // In a real app, this would update the backend
+                    // For demo, we'll just show a notification
+                    showNotification(`Story ${data.id} moved to ${columnName}`);
+                });
+            });
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.textContent = message;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: var(--jira-green);
+                color: white;
+                padding: 12px 20px;
+                border-radius: 6px;
+                z-index: 2000;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                animation: slideIn 0.3s ease;
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Add CSS for notification animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize drag and drop
+        document.addEventListener('DOMContentLoaded', function() {
+            makeStoriesDraggable();
+            addDropZones();
+        });
+    </script>
+</body>
+</html>

@@ -612,7 +612,7 @@
 
         .payment-methods {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: var(--spacing-md);
             margin: var(--spacing-xl) 0;
         }
@@ -626,6 +626,11 @@
             transition: all var(--transition-fast);
             text-align: center;
             position: relative;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         .payment-method:hover {
@@ -658,8 +663,25 @@
         }
 
         .payment-method-icon {
-            font-size: 2rem;
+            font-size: 2.5rem;
             margin-bottom: var(--spacing-sm);
+            transition: transform var(--transition-fast);
+        }
+
+        .payment-method:hover .payment-method-icon {
+            transform: scale(1.1);
+        }
+
+        .payment-method h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: var(--spacing-xs);
+            line-height: 1.2;
+        }
+
+        .payment-method small {
+            font-size: 0.85rem;
+            opacity: 0.8;
         }
 
         .payment-form {
@@ -1286,8 +1308,401 @@
                 font-size: 1.5rem;
             }
 
+            .step-subtitle {
+                font-size: 1rem;
+            }
+
             .specialties-grid {
                 grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: var(--spacing-md);
+            }
+
+            .specialty-card {
+                padding: var(--spacing-lg);
+            }
+
+            .specialty-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+
+            .specialty-name {
+                font-size: 1rem;
+            }
+
+            .specialty-desc {
+                font-size: 0.85rem;
+            }
+
+            .doctors-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .doctor-card {
+                margin-bottom: var(--spacing-md);
+            }
+
+            .doctor-image {
+                height: 150px;
+            }
+
+            .doctor-info {
+                padding: var(--spacing-md);
+            }
+
+            .doctor-name {
+                font-size: 1.1rem;
+            }
+
+            .doctor-specialty {
+                font-size: 0.9rem;
+            }
+
+            .doctor-bio {
+                font-size: 0.85rem;
+            }
+
+            .calendar-section {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-lg);
+            }
+
+            .calendar-container, .time-slots-section {
+                padding: var(--spacing-md);
+            }
+
+            .section-label {
+                font-size: 1.1rem;
+            }
+
+            .time-slots {
+                grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+                gap: var(--spacing-xs);
+            }
+
+            .time-slot {
+                padding: var(--spacing-sm);
+                font-size: 0.9rem;
+            }
+
+            .consultation-options {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-sm);
+            }
+
+            .consultation-option {
+                padding: var(--spacing-md);
+            }
+
+            .consultation-option i {
+                font-size: 1.5rem !important;
+            }
+
+            .consultation-option h4 {
+                font-size: 1rem;
+                margin: var(--spacing-xs) 0;
+            }
+
+            .payment-section {
+                padding: var(--spacing-lg);
+            }
+
+            .payment-header {
+                margin-bottom: var(--spacing-lg);
+            }
+
+            .payment-title {
+                font-size: 1.5rem;
+            }
+
+            .payment-amount {
+                font-size: 2rem;
+            }
+
+            .payment-note {
+                font-size: 0.85rem;
+            }
+
+            .payment-methods {
+                grid-template-columns: repeat(2, 1fr);
+                gap: var(--spacing-sm);
+            }
+
+            .payment-method {
+                padding: var(--spacing-md);
+                min-height: 100px;
+            }
+
+            .payment-method-icon {
+                font-size: 2rem;
+                margin-bottom: var(--spacing-xs);
+            }
+
+            .payment-method h4 {
+                font-size: 0.9rem;
+                margin-bottom: var(--spacing-xs);
+            }
+
+            .payment-method small {
+                font-size: 0.75rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group {
+                margin-bottom: var(--spacing-md);
+            }
+
+            .form-label {
+                font-size: 0.9rem;
+            }
+
+            .form-input {
+                padding: var(--spacing-sm);
+                font-size: 0.9rem;
+            }
+
+            .yape-qr-code {
+                width: 150px;
+                height: 150px;
+            }
+
+            .yape-qr-placeholder {
+                font-size: 3rem;
+            }
+
+            .yape-instructions {
+                padding: var(--spacing-md);
+            }
+
+            .yape-step {
+                padding: var(--spacing-xs);
+                margin-bottom: var(--spacing-sm);
+                flex-direction: column;
+                align-items: flex-start;
+                gap: var(--spacing-sm);
+            }
+
+            .yape-step-number {
+                align-self: flex-start;
+            }
+
+            .yape-timer {
+                font-size: 0.9rem;
+                padding: var(--spacing-xs) var(--spacing-md);
+            }
+
+            .btn {
+                padding: var(--spacing-md) var(--spacing-lg);
+                font-size: 1rem;
+            }
+
+            .nav-button {
+                padding: var(--spacing-sm) var(--spacing-md);
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Pantallas muy pequeñas (400px) */
+        @media (max-width: 400px) {
+            .main-container {
+                padding: var(--spacing-sm);
+            }
+
+            .step-container {
+                padding: var(--spacing-md);
+            }
+
+            .step-title {
+                font-size: 1.3rem;
+            }
+
+            .step-subtitle {
+                font-size: 0.9rem;
+            }
+
+            .specialties-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: var(--spacing-sm);
+            }
+
+            .specialty-card {
+                padding: var(--spacing-md);
+            }
+
+            .specialty-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 1.3rem;
+                margin-bottom: var(--spacing-sm);
+            }
+
+            .specialty-name {
+                font-size: 0.9rem;
+                margin-bottom: var(--spacing-xs);
+            }
+
+            .specialty-desc {
+                font-size: 0.8rem;
+            }
+
+            .doctor-image {
+                height: 120px;
+            }
+
+            .doctor-info {
+                padding: var(--spacing-sm);
+            }
+
+            .doctor-name {
+                font-size: 1rem;
+            }
+
+            .doctor-badge {
+                font-size: 0.7rem;
+                padding: 2px var(--spacing-xs);
+            }
+
+            .payment-methods {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-xs);
+            }
+
+            .payment-method {
+                padding: var(--spacing-sm);
+                min-height: 80px;
+                flex-direction: row;
+                text-align: left;
+                gap: var(--spacing-sm);
+            }
+
+            .payment-method-icon {
+                font-size: 1.8rem;
+                margin-bottom: 0;
+                flex-shrink: 0;
+            }
+
+            .payment-method-content {
+                flex: 1;
+            }
+
+            .payment-method h4 {
+                font-size: 0.85rem;
+                margin-bottom: 2px;
+            }
+
+            .payment-method small {
+                font-size: 0.7rem;
+            }
+
+            .time-slots {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .time-slot {
+                font-size: 0.8rem;
+                padding: var(--spacing-xs);
+            }
+
+            .consultation-option {
+                padding: var(--spacing-sm);
+            }
+
+            .consultation-option i {
+                font-size: 1.3rem !important;
+            }
+
+            .consultation-option h4 {
+                font-size: 0.9rem;
+            }
+
+            .consultation-option p {
+                font-size: 0.85rem;
+            }
+
+            .yape-qr-code {
+                width: 120px;
+                height: 120px;
+            }
+
+            .yape-qr-placeholder {
+                font-size: 2.5rem;
+            }
+
+            .yape-step {
+                font-size: 0.85rem;
+            }
+
+            .btn {
+                padding: var(--spacing-sm) var(--spacing-md);
+                font-size: 0.9rem;
+            }
+
+            .payment-amount {
+                font-size: 1.8rem;
+            }
+
+            .payment-title {
+                font-size: 1.3rem;
+            }
+        }
+
+        /* Pantallas ultra pequeñas (320px) */
+        @media (max-width: 320px) {
+            :root {
+                --spacing-xs: 2px;
+                --spacing-sm: 4px;
+                --spacing-md: 8px;
+                --spacing-lg: 12px;
+                --spacing-xl: 16px;
+                --spacing-xxl: 24px;
+            }
+
+            .main-container {
+                padding: var(--spacing-xs);
+            }
+
+            .step-container {
+                padding: var(--spacing-sm);
+            }
+
+            .specialties-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .specialty-card {
+                padding: var(--spacing-sm);
+            }
+
+            .payment-method {
+                min-height: 60px;
+                padding: var(--spacing-xs);
+            }
+
+            .payment-method-icon {
+                font-size: 1.5rem;
+            }
+
+            .payment-method h4 {
+                font-size: 0.8rem;
+            }
+
+            .payment-method small {
+                font-size: 0.65rem;
+            }
+
+            .time-slots {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .btn {
+                padding: var(--spacing-xs) var(--spacing-sm);
+                font-size: 0.8rem;
+            }
+        }-fit, minmax(150px, 1fr));
                 gap: var(--spacing-md);
             }
 
